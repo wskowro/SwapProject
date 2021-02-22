@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "313543747598",
-    "project_id": "swapdb-bc203",
-    "storage_bucket": "swapdb-bc203.appspot.com"
+    "project_number": "1073319861672",
+    "project_id": "swapdb-9efea",
+    "storage_bucket": "swapdb-9efea.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:313543747598:android:6c57e33831cf0b7677f45f",
+        "mobilesdk_app_id": "1:1073319861672:android:e86ec0e6495f836088d19d",
         "android_client_info": {
           "package_name": "com.example.scheduleapp_capstone"
         }
       },
       "oauth_client": [
         {
-          "client_id": "313543747598-691i5a3sov6cl9ahng9ei6b2jbpgtjim.apps.googleusercontent.com",
+          "client_id": "1073319861672-mbb4m26mqrvcgun95n9f81ih2ao3enmd.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCVZILbxI5YKN9MDoFDTE9a8Nc3YPVybcI"
+          "current_key": "AIzaSyByorq9Lz60dkjNzoq8wI8xAqW0FpZc3m8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "313543747598-691i5a3sov6cl9ahng9ei6b2jbpgtjim.apps.googleusercontent.com",
+              "client_id": "1073319861672-mbb4m26mqrvcgun95n9f81ih2ao3enmd.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
