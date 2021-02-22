@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "313543747598",
+    "project_id": "swapdb-bc203",
+    "storage_bucket": "swapdb-bc203.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:313543747598:android:35f3a91d918adbe477f45f",
+        "android_client_info": {
+          "package_name": "com.example.scheduleapp_capstone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "313543747598-691i5a3sov6cl9ahng9ei6b2jbpgtjim.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVZILbxI5YKN9MDoFDTE9a8Nc3YPVybcI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "313543747598-691i5a3sov6cl9ahng9ei6b2jbpgtjim.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
