@@ -33,31 +33,32 @@ class _MyLoginPageState extends State<MyLoginPage> {
       appBar: AppBar(
         title: Text("Swap App"),
       ),
-      body: Container(
-        margin: EdgeInsets.all(24),
+      body: Center(
         child: ModalProgressHUD(
           inAsyncCall: showProgress,
           child: Column(
-
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               SizedBox(
-                height: 200.0,
+                height: 225.0,
                 child: Image.asset(
                   "assets/images/logo.png",
                   fit: BoxFit.contain,
                 ),
-              ),
-              SizedBox(
-                height: 30.0,
               ),
               Text(
                 "Login Page",
                 style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20.0),
               ),
               SizedBox(
+                height: 50.0,
+              ),
+              SizedBox(
                 height: 20.0,
               ),
-              TextField(
+              Container(
+                width: 310.0,
+                child: TextField(
                 keyboardType: TextInputType.emailAddress,
                 textAlign: TextAlign.center,
                 onChanged: (value) {
@@ -65,62 +66,71 @@ class _MyLoginPageState extends State<MyLoginPage> {
                 },
                 decoration: InputDecoration(
                     hintText: "Enter your Email",
+                    prefixIcon: Icon(Icons.mail_outline),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(32.0)))),
+                        borderRadius: BorderRadius.all(Radius.circular(7.0)))),
               ),
+          ),
               SizedBox(
                 height: 20.0,
               ),
-              TextField(
-                obscureText: true,
-                textAlign: TextAlign.center,
-                onChanged: (value) {
-                  password = value; //get value from textField
-                },
-                decoration: InputDecoration(
-                    hintText: "Enter your Password",
-                    prefixIcon: Icon(Icons.lock_outline),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(32.0)))),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Material(
-                elevation: 5,
-                color: Colors.lightBlue,
-                borderRadius: BorderRadius.circular(32.0),
-                child: MaterialButton(
-                  onPressed: () async {
-                    setState(() {
-                      showProgress = true;
-                    });
-                    try {
-                      final newUser = await _auth.signInWithEmailAndPassword(
-                          email: email, password: password);
-                      print(newUser.toString());
-                      if (newUser != null) {
-                        Fluttertoast.showToast(
-                            msg: "Login Successful",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.blueAccent,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
-                        setState(() {
-                          showProgress = false;
-                        });
-                      }
-                    } catch (e) {}
+              Container(
+                width: 310.0,
+                child: TextField(
+                  obscureText: true,
+                  textAlign: TextAlign.center,
+                  onChanged: (value) {
+                    password = value; //get value from textField
                   },
-                  minWidth: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                  color: Color(0xff01A0C7),
-                  child: Text("Login", style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0, color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
+                  decoration: InputDecoration(
+                      hintText: "Enter your Password",
+                      prefixIcon: Icon(Icons.lock_outline),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(7.0)))),
+
                 ),
               ),
+              SizedBox(
+                height: 20.0,
+              ),
+              Container(
+                width: 310.0,
+                child: Material(
+                  elevation: 5,
+                  color: Colors.lightBlue,
+                  borderRadius: BorderRadius.circular(7.0),
+                  child: MaterialButton(
+                    onPressed: () async {
+                      setState(() {
+                        showProgress = true;
+                      });
+                      try {
+                        final newUser = await _auth.signInWithEmailAndPassword(
+                            email: email, password: password);
+                        print(newUser.toString());
+                        if (newUser != null) {
+                          Fluttertoast.showToast(
+                              msg: "Login Successful",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.blueAccent,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                          setState(() {
+                            showProgress = false;
+                          });
+                        }
+                      } catch (e) {}
+                    },
+                    minWidth: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                    color: Color(0xff01A0C7),
+                    child: Text("Login", style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0, color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+            ),
               SizedBox(
                 height: 20.0,
               ),
