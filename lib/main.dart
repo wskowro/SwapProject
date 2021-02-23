@@ -33,18 +33,22 @@ class _MyLoginPageState extends State<MyLoginPage> {
       appBar: AppBar(
         title: Text("Swap App"),
       ),
-      body: Center(
+      body: Container(
+        margin: EdgeInsets.all(24),
         child: ModalProgressHUD(
           inAsyncCall: showProgress,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+
             children: <Widget>[
               SizedBox(
-                height: 150.0,
+                height: 200.0,
                 child: Image.asset(
                   "assets/images/logo.png",
                   fit: BoxFit.contain,
                 ),
+              ),
+              SizedBox(
+                height: 30.0,
               ),
               Text(
                 "Login Page",
@@ -116,6 +120,9 @@ class _MyLoginPageState extends State<MyLoginPage> {
                   child: Text("Login", style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0, color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ),
+              ),
+              SizedBox(
+                height: 20.0,
               ),
               GestureDetector(
 
