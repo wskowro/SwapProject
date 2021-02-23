@@ -1,234 +1,140 @@
 import 'package:flutter/material.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'registration.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
+void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Login Page',
+      title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Login Page'),
+      home: MyLoginPage(),
     );
   }
 }
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
+class MyLoginPage extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyLoginPageState createState() => _MyLoginPageState();
 }
-
-class MyRegistrationPage extends StatefulWidget {
-  MyRegistrationPage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyRegistrationPageState createState() => _MyRegistrationPageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class _MyLoginPageState extends State<MyLoginPage> {
+  final _auth = FirebaseAuth.instance;
+  bool showProgress = false;
+  String email, password;
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-
   @override
   Widget build(BuildContext context) {
-
-    final emailField = TextField(
-      obscureText: false,
-      style: style,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-          hintText: "Email",
-          ),
-    );
-
-    final passwordField = TextField(
-      obscureText: true,
-      style: style,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-          hintText: "Password",
-          ),
-    );
-
-    final loginButton = Material(
-      elevation: 5.0,
-      color: Color(0xff01A0C7),
-      child: MaterialButton(
-        minWidth: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        onPressed: () {},
-        child: Text("Login",
-            textAlign: TextAlign.center,
-            style: style.copyWith(
-                color: Colors.white, fontWeight: FontWeight.bold)),
-      ),
-    );
-
-    final registerButton = Material(
-      elevation: 5.0,
-      color: Color(0xff01A0C7),
-      child: MaterialButton(
-        minWidth: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => MyRegistrationPage())
-          );
-        },
-        child: Text("Register",
-            textAlign: TextAlign.center,
-            style: style.copyWith(
-                color: Colors.white, fontWeight: FontWeight.bold)),
-      ),
-    );
-
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Swap App"),
+      ),
       body: Center(
-        child: Container(
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.only(top:1.0,bottom:1.0,left:35.0,right:35.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  height: 170.0,
-                  child: Image.asset(
-                    "assets/images/logo.png",
-                    fit: BoxFit.contain,
+        child: ModalProgressHUD(
+          inAsyncCall: showProgress,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(
+                height: 150.0,
+                child: Image.asset(
+                  "assets/images/logo.png",
+                  fit: BoxFit.contain,
+                ),
+              ),
+              Text(
+                "Login Page",
+                style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20.0),
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              TextField(
+                keyboardType: TextInputType.emailAddress,
+                textAlign: TextAlign.center,
+                onChanged: (value) {
+                  email = value; // get value from TextField
+                },
+                decoration: InputDecoration(
+                    hintText: "Enter your Email",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)))),
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              TextField(
+                obscureText: true,
+                textAlign: TextAlign.center,
+                onChanged: (value) {
+                  password = value; //get value from textField
+                },
+                decoration: InputDecoration(
+                    hintText: "Enter your Password",
+                    prefixIcon: Icon(Icons.lock_outline),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)))),
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              Material(
+                elevation: 5,
+                color: Colors.lightBlue,
+                borderRadius: BorderRadius.circular(32.0),
+                child: MaterialButton(
+                  onPressed: () async {
+                    setState(() {
+                      showProgress = true;
+                    });
+                    try {
+                      final newUser = await _auth.signInWithEmailAndPassword(
+                          email: email, password: password);
+                      print(newUser.toString());
+                      if (newUser != null) {
+                        Fluttertoast.showToast(
+                            msg: "Login Successful",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.blueAccent,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                        setState(() {
+                          showProgress = false;
+                        });
+                      }
+                    } catch (e) {}
+                  },
+                  minWidth: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                  color: Color(0xff01A0C7),
+                  child: Text("Login", style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0, color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ),
-                SizedBox(height: 25.0),
-                emailField,
-                SizedBox(height: 25.0),
-                passwordField,
-                SizedBox(
-                  height: 35.0,
+              ),
+              GestureDetector(
+
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyRegistrationPage()),
+                  );
+                },
+                child: Text(
+                  "Not Signed up? Register Now",
+                  style: TextStyle(
+                      color: Colors.blue, fontWeight: FontWeight.w900),
                 ),
-                loginButton,
-                SizedBox(
-                  height: 15.0,
-                ),
-                registerButton,
-                SizedBox(
-                  height: 15.0,
-                ),
-              ],
-            ),
+              )
+            ],
           ),
         ),
       ),
     );
   }
 }
-
-class _MyRegistrationPageState extends State<MyRegistrationPage> {
-  TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-
-  @override
-  Widget build(BuildContext context) {
-
-    final fNameField = TextField(
-      obscureText: false,
-      style: style,
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        hintText: "First Name",
-      ),
-    );
-
-    final lNameField = TextField(
-      obscureText: false,
-      style: style,
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        hintText: "Last name",
-      ),
-    );
-
-    final emailField = TextField(
-      obscureText: false,
-      style: style,
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        hintText: "Email",
-      ),
-    );
-
-    final passwordField = TextField(
-      obscureText: true,
-      style: style,
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        hintText: "Password",
-      ),
-    );
-
-    final registerButton = Material(
-      elevation: 5.0,
-      color: Color(0xff01A0C7),
-      child: MaterialButton(
-        minWidth: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        onPressed: () {},
-        child: Text("Register",
-            textAlign: TextAlign.center,
-            style: style.copyWith(
-                color: Colors.white, fontWeight: FontWeight.bold)),
-      ),
-    );
-
-    return Scaffold(
-      body: Center(
-        child: Container(
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.only(top:1.0,bottom:1.0,left:35.0,right:35.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  height: 170.0,
-                  child: Image.asset(
-                    "assets/images/logo.png",
-                    fit: BoxFit.contain,
-                  ),
-                ),
-                SizedBox(height: 10.0),
-                fNameField,
-                SizedBox(height: 10.0),
-                lNameField,
-                SizedBox(height: 10.0),
-                emailField,
-                SizedBox(height: 10.0),
-                passwordField,
-                SizedBox(
-                  height: 10.0,
-                ),
-                registerButton,
-                SizedBox(
-                  height: 15.0,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-
