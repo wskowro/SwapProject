@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'main.dart';
+import 'chat.dart';
 
 void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
@@ -18,11 +20,17 @@ class MyApp extends StatelessWidget {
   }
 }
 class MyHomePage extends StatefulWidget {
+
+  final String currentUserId;
+  MyHomePage({Key key, @required this.currentUserId}) : super(key: key);
+
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyHomePageState createState() => _MyHomePageState(currentUserId: currentUserId);
 }
 class _MyHomePageState extends State<MyHomePage> {
+  _MyHomePageState({Key key, @required this.currentUserId});
   final _auth = FirebaseAuth.instance;
+  String currentUserId;
   bool showProgress = false;
 
   @override
@@ -84,7 +92,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     setState(() {
                       showProgress = true;
                     });
-
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ChatApp(currentUserId: currentUserId)));
                   },
                   minWidth: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),

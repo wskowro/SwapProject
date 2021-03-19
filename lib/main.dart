@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'registration.dart';
 import 'home.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,6 +29,7 @@ class MyLoginPage extends StatefulWidget {
   _MyLoginPageState createState() => _MyLoginPageState();
 }
 class _MyLoginPageState extends State<MyLoginPage> {
+
   final _auth = FirebaseAuth.instance;
   bool showProgress = false;
   String email, password;
@@ -109,7 +115,11 @@ class _MyLoginPageState extends State<MyLoginPage> {
                         final newUser = await _auth.signInWithEmailAndPassword(
                             email: email, password: password);
                         print(newUser.toString());
+                        User myUser = newUser.user;
+                        myUser.reload();
+                        String id = myUser.uid;
                         if (newUser != null) {
+
                           Fluttertoast.showToast(
                               msg: "Login Successful",
                               toastLength: Toast.LENGTH_SHORT,
@@ -123,7 +133,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                           });
                           Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => MyHomePage()));
+                              MaterialPageRoute(builder: (context) => MyHomePage(currentUserId: id)));
                         }
                       } catch (e) {
 

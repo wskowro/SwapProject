@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'main.dart';
 
 void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
@@ -24,7 +26,7 @@ class MyRegistrationPage extends StatefulWidget {
 class _MyRegistrationPageState extends State<MyRegistrationPage> {
   final _auth = FirebaseAuth.instance;
   bool showProgress = false;
-  String email, password;
+  String email, password, userName;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,6 +81,19 @@ class _MyRegistrationPageState extends State<MyRegistrationPage> {
               SizedBox(
                 height: 20.0,
               ),
+              TextField(
+                textAlign: TextAlign.center,
+                onChanged: (value) {
+                  userName = value; //get the value entered by user.
+                },
+                decoration: InputDecoration(
+                    hintText: "Enter your username",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)))),
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
               Material(
                 elevation: 5,
                 color: Colors.lightBlue,
@@ -90,14 +105,23 @@ class _MyRegistrationPageState extends State<MyRegistrationPage> {
                       showProgress = true;
                     });
                     try {
-                      final newuser =
-                      await _auth.createUserWithEmailAndPassword(
+                      final newuser = await _auth.createUserWithEmailAndPassword(
                           email: email, password: password);
+                      User myUser = newuser.user;
+                      myUser.updateProfile(displayName: userName);
+
+                      FirebaseFirestore.instance.collection('users').doc().set({
+                        'name': userName,
+                        'id': myUser.uid,
+                        'email': myUser.email,
+                      });
+
+
                       if (newuser != null) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MyRegistrationPage()),
+                              builder: (context) => MyLoginPage()),
                         );
                         setState(() {
                           showProgress = false;
