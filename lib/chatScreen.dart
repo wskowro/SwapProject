@@ -15,8 +15,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Chat extends StatelessWidget {
   final String peerId;
   final String peerAvatar;
+  final String currentUserId;
 
-  Chat({Key key, @required this.peerId, @required this.peerAvatar}) : super(key: key);
+  Chat({Key key, @required this.peerId, @required this.peerAvatar, @required this.currentUserId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +25,14 @@ class Chat extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'CHAT',
-          style: TextStyle(color: Colors.lightBlue, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
       body: ChatScreen(
         peerId: peerId,
         peerAvatar: peerAvatar,
+        currentUserId: currentUserId,
       ),
     );
   }
@@ -39,19 +41,21 @@ class Chat extends StatelessWidget {
 class ChatScreen extends StatefulWidget {
   final String peerId;
   final String peerAvatar;
+  final String currentUserId;
 
-  ChatScreen({Key key, @required this.peerId, @required this.peerAvatar}) : super(key: key);
+  ChatScreen({Key key, @required this.peerId, @required this.peerAvatar,  @required this.currentUserId}) : super(key: key);
 
   @override
-  State createState() => ChatScreenState(peerId: peerId, peerAvatar: peerAvatar);
+  State createState() => ChatScreenState(peerId: peerId, peerAvatar: peerAvatar, currentUserId: currentUserId);
 }
 
 class ChatScreenState extends State<ChatScreen> {
-  ChatScreenState({Key key, @required this.peerId, @required this.peerAvatar});
+
+  ChatScreenState({Key key, @required this.peerId, @required this.peerAvatar,  @required this.currentUserId});
 
   String peerId;
   String peerAvatar;
-  String id;
+  String currentUserId;
 
   List<QueryDocumentSnapshot> listMessage = new List.from([]);
   int _limit = 20;
@@ -62,7 +66,7 @@ class ChatScreenState extends State<ChatScreen> {
   File imageFile;
   bool isLoading;
   bool isShowSticker;
-  String imageUrl;
+
 
   final TextEditingController textEditingController = TextEditingController();
   final ScrollController listScrollController = ScrollController();
@@ -87,7 +91,7 @@ class ChatScreenState extends State<ChatScreen> {
 
     isLoading = false;
     isShowSticker = false;
-    imageUrl = '';
+
 
     readLocal();
   }
@@ -103,33 +107,20 @@ class ChatScreenState extends State<ChatScreen> {
 
   readLocal() async {
     prefs = await SharedPreferences.getInstance();
-    id = prefs.getString('id') ?? '';
-    if (id.hashCode <= peerId.hashCode) {
-      groupChatId = '$id-$peerId';
+    //id = prefs.getString('id');
+    if (currentUserId.hashCode <= peerId.hashCode) {
+     groupChatId = '$currentUserId' + '$peerId';
     } else {
-      groupChatId = '$peerId-$id';
+      groupChatId = '$peerId' + '$currentUserId';
     }
 
 
-    FirebaseFirestore.instance.collection('users').doc(id).update({'chattingWith': peerId});
+    FirebaseFirestore.instance.collection('users').doc(currentUserId).update({'chattingWith': peerId});
 
     setState(() {});
   }
 
-  Future getImage() async {
-    ImagePicker imagePicker = ImagePicker();
-    PickedFile pickedFile;
 
-    pickedFile = await imagePicker.getImage(source: ImageSource.gallery);
-    imageFile = File(pickedFile.path);
-
-    if (imageFile != null) {
-      setState(() {
-        isLoading = true;
-      });
-      uploadFile();
-    }
-  }
 
   void getSticker() {
     // Hide keyboard when sticker appear
@@ -139,24 +130,6 @@ class ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  Future uploadFile() async {
-    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-    StorageReference reference = FirebaseStorage.instance.ref().child(fileName);
-    StorageUploadTask uploadTask = reference.putFile(imageFile);
-    StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
-    storageTaskSnapshot.ref.getDownloadURL().then((downloadUrl) {
-      imageUrl = downloadUrl;
-      setState(() {
-        isLoading = false;
-        onSendMessage(imageUrl, 1);
-      });
-    }, onError: (err) {
-      setState(() {
-        isLoading = false;
-      });
-      Fluttertoast.showToast(msg: 'This file is not an image');
-    });
-  }
 
   void onSendMessage(String content, int type) {
     // type: 0 = text, 1 = image, 2 = sticker
@@ -173,7 +146,7 @@ class ChatScreenState extends State<ChatScreen> {
         transaction.set(
           documentReference,
           {
-            'idFrom': id,
+            'idFrom': currentUserId,
             'idTo': peerId,
             'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
             'content': content,
@@ -188,7 +161,7 @@ class ChatScreenState extends State<ChatScreen> {
   }
 
   Widget buildItem(int index, DocumentSnapshot document) {
-    if (document.data()['idFrom'] == id) {
+    if (document.data()['idFrom'] == currentUserId) {
       // Right (my message)
       return Row(
         children: <Widget>[
@@ -197,11 +170,11 @@ class ChatScreenState extends State<ChatScreen> {
               ? Container(
             child: Text(
               document.data()['content'],
-              style: TextStyle(color: Colors.lightBlue),
+              style: TextStyle(color: Colors.black),
             ),
             padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
             width: 200.0,
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8.0)),
+            decoration: BoxDecoration(color: Colors.blueGrey, borderRadius: BorderRadius.circular(8.0)),
             margin: EdgeInsets.only(bottom: isLastMessageRight(index) ? 20.0 : 10.0, right: 10.0),
           )
               : document.data()['type'] == 1
@@ -218,7 +191,7 @@ class ChatScreenState extends State<ChatScreen> {
                     height: 200.0,
                     padding: EdgeInsets.all(70.0),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Colors.black,
                       borderRadius: BorderRadius.all(
                         Radius.circular(8.0),
                       ),
@@ -226,7 +199,7 @@ class ChatScreenState extends State<ChatScreen> {
                   ),
                   errorWidget: (context, url, error) => Material(
                     child: Image.asset(
-                      'images/img_not_available.jpeg',
+                      'assets/images/img_not_available.jpeg',
                       width: 200.0,
                       height: 200.0,
                       fit: BoxFit.cover,
@@ -236,7 +209,6 @@ class ChatScreenState extends State<ChatScreen> {
                     ),
                     clipBehavior: Clip.hardEdge,
                   ),
-                  imageUrl: document.data()['content'],
                   width: 200.0,
                   height: 200.0,
                   fit: BoxFit.cover,
@@ -254,12 +226,7 @@ class ChatScreenState extends State<ChatScreen> {
           )
           // Sticker
               : Container(
-            child: Image.asset(
-              'images/${document.data()['content']}.gif',
-              width: 100.0,
-              height: 100.0,
-              fit: BoxFit.cover,
-            ),
+
             margin: EdgeInsets.only(bottom: isLastMessageRight(index) ? 20.0 : 10.0, right: 10.0),
           ),
         ],
@@ -274,21 +241,7 @@ class ChatScreenState extends State<ChatScreen> {
               children: <Widget>[
                 isLastMessageLeft(index)
                     ? Material(
-                  child: CachedNetworkImage(
-                    placeholder: (context, url) => Container(
-                      child: CircularProgressIndicator(
-                        strokeWidth: 1.0,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-                      ),
-                      width: 35.0,
-                      height: 35.0,
-                      padding: EdgeInsets.all(10.0),
-                    ),
-                    imageUrl: peerAvatar,
-                    width: 35.0,
-                    height: 35.0,
-                    fit: BoxFit.cover,
-                  ),
+
                   borderRadius: BorderRadius.all(
                     Radius.circular(18.0),
                   ),
@@ -299,7 +252,7 @@ class ChatScreenState extends State<ChatScreen> {
                     ? Container(
                   child: Text(
                     document.data()['content'],
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.black),
                   ),
                   padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
                   width: 200.0,
@@ -337,7 +290,7 @@ class ChatScreenState extends State<ChatScreen> {
                           ),
                           clipBehavior: Clip.hardEdge,
                         ),
-                        imageUrl: document.data()['content'],
+
                         width: 200.0,
                         height: 200.0,
                         fit: BoxFit.cover,
@@ -387,7 +340,7 @@ class ChatScreenState extends State<ChatScreen> {
   }
 
   bool isLastMessageLeft(int index) {
-    if ((index > 0 && listMessage != null && listMessage[index - 1].data()['idFrom'] == id) || index == 0) {
+    if ((index > 0 && listMessage != null && listMessage[index - 1].data()['idFrom'] == currentUserId) || index == 0) {
       return true;
     } else {
       return false;
@@ -395,7 +348,7 @@ class ChatScreenState extends State<ChatScreen> {
   }
 
   bool isLastMessageRight(int index) {
-    if ((index > 0 && listMessage != null && listMessage[index - 1].data()['idFrom'] != id) || index == 0) {
+    if ((index > 0 && listMessage != null && listMessage[index - 1].data()['idFrom'] != currentUserId) || index == 0) {
       return true;
     } else {
       return false;
@@ -408,7 +361,7 @@ class ChatScreenState extends State<ChatScreen> {
         isShowSticker = false;
       });
     } else {
-      FirebaseFirestore.instance.collection('users').doc(id).update({'chattingWith': null});
+      FirebaseFirestore.instance.collection('users').doc(currentUserId).update({'chattingWith': null});
       Navigator.pop(context);
     }
 
@@ -564,11 +517,7 @@ class ChatScreenState extends State<ChatScreen> {
           Material(
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 1.0),
-              child: IconButton(
-                icon: Icon(Icons.image),
-                onPressed: getImage,
-                color: Colors.lightBlue,
-              ),
+
             ),
             color: Colors.white,
           ),

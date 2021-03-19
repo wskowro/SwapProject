@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'chatScreen.dart';
+import 'home.dart' hide MyApp;
 import 'widget/loading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -139,11 +140,11 @@ class ChatAppState extends State<ChatApp> {
                       margin: EdgeInsets.only(bottom: 10.0),
                     ),
                     Text(
-                      'Exit app',
+                      'Home',
                       style: TextStyle(color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      'Are you sure to exit app?',
+                      'Go back to home screen?',
                       style: TextStyle(color: Colors.white70, fontSize: 14.0),
                     ),
                   ],
@@ -195,7 +196,10 @@ class ChatAppState extends State<ChatApp> {
       case 0:
         break;
       case 1:
-        exit(0);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => MyHomePage()),
+        );
         break;
     }
   }
@@ -333,6 +337,7 @@ class ChatAppState extends State<ChatApp> {
                     builder: (context) => Chat(
                       peerId: document.data()['id'],
                       peerAvatar: document.data()['photoUrl'],
+                        currentUserId: currentUserId,
                     )));
           },
           color: Colors.lightBlue,
