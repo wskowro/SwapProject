@@ -1,14 +1,10 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'widget/full_photo.dart';
 import 'widget/loading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,15 +12,16 @@ class Chat extends StatelessWidget {
   final String peerId;
   final String peerAvatar;
   final String currentUserId;
+  final String peerName;
 
-  Chat({Key key, @required this.peerId, @required this.peerAvatar, @required this.currentUserId}) : super(key: key);
+  Chat({Key key, @required this.peerId, @required this.peerAvatar, @required this.currentUserId, @required this.peerName}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'CHAT',
+          peerName,
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -33,6 +30,7 @@ class Chat extends StatelessWidget {
         peerId: peerId,
         peerAvatar: peerAvatar,
         currentUserId: currentUserId,
+        peerName: peerName,
       ),
     );
   }
@@ -42,8 +40,9 @@ class ChatScreen extends StatefulWidget {
   final String peerId;
   final String peerAvatar;
   final String currentUserId;
+  final String peerName;
 
-  ChatScreen({Key key, @required this.peerId, @required this.peerAvatar,  @required this.currentUserId}) : super(key: key);
+  ChatScreen({Key key, @required this.peerId, @required this.peerAvatar,  @required this.currentUserId, @required this.peerName}) : super(key: key);
 
   @override
   State createState() => ChatScreenState(peerId: peerId, peerAvatar: peerAvatar, currentUserId: currentUserId);
@@ -216,10 +215,7 @@ class ChatScreenState extends State<ChatScreen> {
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
                 clipBehavior: Clip.hardEdge,
               ),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => FullPhoto(url: document.data()['content'])));
-              },
+
               padding: EdgeInsets.all(0),
             ),
             margin: EdgeInsets.only(bottom: isLastMessageRight(index) ? 20.0 : 10.0, right: 10.0),
@@ -241,8 +237,12 @@ class ChatScreenState extends State<ChatScreen> {
               children: <Widget>[
                 isLastMessageLeft(index)
                     ? Material(
-
-                  borderRadius: BorderRadius.all(
+                    child: Icon(
+                      Icons.account_circle,
+                      size: 50.0,
+                      color: Colors.blue,
+                    ),
+                      borderRadius: BorderRadius.all(
                     Radius.circular(18.0),
                   ),
                   clipBehavior: Clip.hardEdge,
@@ -279,11 +279,10 @@ class ChatScreenState extends State<ChatScreen> {
                           ),
                         ),
                         errorWidget: (context, url, error) => Material(
-                          child: Image.asset(
-                            'images/img_not_available.jpeg',
-                            width: 200.0,
-                            height: 200.0,
-                            fit: BoxFit.cover,
+                          child: Icon(
+                            Icons.account_circle,
+                            size: 50.0,
+                            color: Colors.blue,
                           ),
                           borderRadius: BorderRadius.all(
                             Radius.circular(8.0),
@@ -295,15 +294,11 @@ class ChatScreenState extends State<ChatScreen> {
                         height: 200.0,
                         fit: BoxFit.cover,
                       ),
+
                       borderRadius: BorderRadius.all(Radius.circular(8.0)),
                       clipBehavior: Clip.hardEdge,
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => FullPhoto(url: document.data()['content'])));
-                    },
+
                     padding: EdgeInsets.all(0),
                   ),
                   margin: EdgeInsets.only(left: 10.0),
@@ -378,8 +373,7 @@ class ChatScreenState extends State<ChatScreen> {
               // List of messages
               buildListMessage(),
 
-              // Sticker
-              (isShowSticker ? buildSticker() : Container()),
+
 
               // Input content
               buildInput(),
@@ -394,114 +388,7 @@ class ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Widget buildSticker() {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              FlatButton(
-                onPressed: () => onSendMessage('mimi1', 2),
-                child: Image.asset(
-                  'images/mimi1.gif',
-                  width: 50.0,
-                  height: 50.0,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              FlatButton(
-                onPressed: () => onSendMessage('mimi2', 2),
-                child: Image.asset(
-                  'images/mimi2.gif',
-                  width: 50.0,
-                  height: 50.0,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              FlatButton(
-                onPressed: () => onSendMessage('mimi3', 2),
-                child: Image.asset(
-                  'images/mimi3.gif',
-                  width: 50.0,
-                  height: 50.0,
-                  fit: BoxFit.cover,
-                ),
-              )
-            ],
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          ),
-          Row(
-            children: <Widget>[
-              FlatButton(
-                onPressed: () => onSendMessage('mimi4', 2),
-                child: Image.asset(
-                  'images/mimi4.gif',
-                  width: 50.0,
-                  height: 50.0,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              FlatButton(
-                onPressed: () => onSendMessage('mimi5', 2),
-                child: Image.asset(
-                  'images/mimi5.gif',
-                  width: 50.0,
-                  height: 50.0,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              FlatButton(
-                onPressed: () => onSendMessage('mimi6', 2),
-                child: Image.asset(
-                  'images/mimi6.gif',
-                  width: 50.0,
-                  height: 50.0,
-                  fit: BoxFit.cover,
-                ),
-              )
-            ],
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          ),
-          Row(
-            children: <Widget>[
-              FlatButton(
-                onPressed: () => onSendMessage('mimi7', 2),
-                child: Image.asset(
-                  'images/mimi7.gif',
-                  width: 50.0,
-                  height: 50.0,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              FlatButton(
-                onPressed: () => onSendMessage('mimi8', 2),
-                child: Image.asset(
-                  'images/mimi8.gif',
-                  width: 50.0,
-                  height: 50.0,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              FlatButton(
-                onPressed: () => onSendMessage('mimi9', 2),
-                child: Image.asset(
-                  'images/mimi9.gif',
-                  width: 50.0,
-                  height: 50.0,
-                  fit: BoxFit.cover,
-                ),
-              )
-            ],
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          )
-        ],
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      ),
-      decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.blueGrey, width: 0.5)), color: Colors.white),
-      padding: EdgeInsets.all(5.0),
-      height: 180.0,
-    );
-  }
+
 
   Widget buildLoading() {
     return Positioned(
@@ -524,11 +411,7 @@ class ChatScreenState extends State<ChatScreen> {
           Material(
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 1.0),
-              child: IconButton(
-                icon: Icon(Icons.face),
-                onPressed: getSticker,
-                color: Colors.lightBlue,
-              ),
+
             ),
             color: Colors.white,
           ),
@@ -543,7 +426,7 @@ class ChatScreenState extends State<ChatScreen> {
                 style: TextStyle(color: Colors.lightBlue, fontSize: 15.0),
                 controller: textEditingController,
                 decoration: InputDecoration.collapsed(
-                  hintText: 'Type your message...',
+                  hintText: '   Type your message...',
                   hintStyle: TextStyle(color: Colors.grey),
                 ),
                 focusNode: focusNode,

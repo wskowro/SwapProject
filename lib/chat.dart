@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -198,7 +197,7 @@ class ChatAppState extends State<ChatApp> {
       case 1:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => MyHomePage()),
+          MaterialPageRoute(builder: (context) => MyHomePage(currentUserId: currentUserId)),
         );
         break;
     }
@@ -225,7 +224,7 @@ class ChatAppState extends State<ChatApp> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'MAIN',
+          'Available Users',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -284,7 +283,7 @@ class ChatAppState extends State<ChatApp> {
                   placeholder: (context, url) => Container(
                     child: CircularProgressIndicator(
                       strokeWidth: 1.0,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
                     ),
                     width: 50.0,
                     height: 50.0,
@@ -338,6 +337,7 @@ class ChatAppState extends State<ChatApp> {
                       peerId: document.data()['id'],
                       peerAvatar: document.data()['photoUrl'],
                         currentUserId: currentUserId,
+                      peerName: document.data()['name'],
                     )));
           },
           color: Colors.lightBlue,
