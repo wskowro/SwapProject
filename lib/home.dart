@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'schedule.dart';
 import 'main.dart';
 import 'chat.dart';
 
@@ -69,7 +69,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     setState(() {
                       showProgress = true;
                     });
-
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MySchedulePage()));
                   },
                   minWidth: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
