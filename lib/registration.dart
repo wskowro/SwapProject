@@ -113,6 +113,7 @@ class _MyRegistrationPageState extends State<MyRegistrationPage> {
                       FirebaseFirestore.instance.collection('users').doc().set({
                         'name': userName,
                         'id': myUser.uid,
+                        'isManager': false,
                         'email': myUser.email,
                       });
 
