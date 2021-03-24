@@ -35,6 +35,8 @@ class _MyLoginPageState extends State<MyLoginPage> {
   String email, password;
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
   @override
+
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -115,6 +117,9 @@ class _MyLoginPageState extends State<MyLoginPage> {
                         final newUser = await _auth.signInWithEmailAndPassword(
                             email: email, password: password);
                         print(newUser.toString());
+
+
+
                         User myUser = newUser.user;
                         myUser.reload();
                         String id = myUser.uid;
@@ -131,9 +136,12 @@ class _MyLoginPageState extends State<MyLoginPage> {
                           setState(() {
                             showProgress = false;
                           });
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => MyHomePage(currentUserId: id)));
+
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) =>
+                                      MyHomePage(currentUserId: id)));
+
                         }
                       } catch (e) {
 
