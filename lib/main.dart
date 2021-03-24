@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'registration.dart';
 import 'home.dart';
+import 'managerHome.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -136,11 +137,19 @@ class _MyLoginPageState extends State<MyLoginPage> {
                           setState(() {
                             showProgress = false;
                           });
-
+                          if (id == 'EPJBgIzeSDNAfnSxXBqIZSR6foC2') {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) =>
+                                    MyManagerHomePage(currentUserId: id)));
+                          }
+                          else
+                            {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) =>
                                       MyHomePage(currentUserId: id)));
+                            }
 
                         }
                       } catch (e) {

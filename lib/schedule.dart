@@ -32,9 +32,18 @@ class _MySchedulePageState extends State<MySchedulePage> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-        body: SfCalendar(
-          view: CalendarView.week,
-        ));
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: SfCalendar(
+              view: CalendarView.week,
+            ),
+          )
+        ),
+      )
+    );
   }
 
 }
