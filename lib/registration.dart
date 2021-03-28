@@ -53,6 +53,9 @@ class _MyRegistrationPageState extends State<MyRegistrationPage> {
               SizedBox(
                 height: 20.0,
               ),
+          Container(
+            width: 310,
+            child:
               TextField(
                 keyboardType: TextInputType.emailAddress,
                 textAlign: TextAlign.center,
@@ -61,12 +64,17 @@ class _MyRegistrationPageState extends State<MyRegistrationPage> {
                 },
                 decoration: InputDecoration(
                     hintText: "Enter your Email",
+                    prefixIcon: Icon(Icons.mail_outline),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(32.0)))),
+                        borderRadius: BorderRadius.all(Radius.circular(7.0)))),
               ),
+          ),
               SizedBox(
                 height: 20.0,
               ),
+          Container(
+            width: 310,
+            child:
               TextField(
                 obscureText: true,
                 textAlign: TextAlign.center,
@@ -75,12 +83,17 @@ class _MyRegistrationPageState extends State<MyRegistrationPage> {
                 },
                 decoration: InputDecoration(
                     hintText: "Enter your Password",
+                    prefixIcon: Icon(Icons.lock_outline),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(32.0)))),
+                        borderRadius: BorderRadius.all(Radius.circular(7.0)))),
               ),
+          ),
               SizedBox(
                 height: 20.0,
               ),
+          Container(
+            width: 310,
+            child:
               TextField(
                 textAlign: TextAlign.center,
                 onChanged: (value) {
@@ -88,16 +101,21 @@ class _MyRegistrationPageState extends State<MyRegistrationPage> {
                 },
                 decoration: InputDecoration(
                     hintText: "Enter your username",
+                    prefixIcon: Icon(Icons.person_outline),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(32.0)))),
+                        borderRadius: BorderRadius.all(Radius.circular(7.0)))),
               ),
+          ),
               SizedBox(
                 height: 20.0,
               ),
+              Container(
+                width: 310,
+                child:
               Material(
                 elevation: 5,
                 color: Colors.lightBlue,
-                borderRadius: BorderRadius.circular(32.0),
+                borderRadius: BorderRadius.circular(7.0),
                 child:
                   MaterialButton(
                   onPressed: () async {
@@ -137,6 +155,7 @@ class _MyRegistrationPageState extends State<MyRegistrationPage> {
                   ),
                 ),
 
+              ),
               ),
               SizedBox(
                 height: 15.0,
