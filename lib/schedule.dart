@@ -22,12 +22,18 @@ class MyApp extends StatelessWidget {
 }
 
 class MySchedulePage extends StatefulWidget {
+  final String currentUserId;
 
-  MySchedulePage({Key key}) : super(key: key);
+  MySchedulePage({Key key, @required this.currentUserId}) : super(key: key);
   @override
-  _MySchedulePageState createState() => _MySchedulePageState();
+  _MySchedulePageState createState() => _MySchedulePageState(currentUserId: currentUserId);
 }
 class _MySchedulePageState extends State<MySchedulePage> {
+  _MySchedulePageState({Key key, @required this.currentUserId});
+  final _auth = FirebaseAuth.instance;
+  String currentUserId;
+  bool showProgress = false;
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

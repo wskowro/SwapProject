@@ -64,19 +64,25 @@ class _MyManagerHomePageState extends State<MyManagerHomePage> {
                 color: Colors.lightBlue,
                 borderRadius: BorderRadius.circular(32.0),
                 child:
-                MaterialButton(
-                  onPressed: () async {
-                    setState(() {
-                      showProgress = true;
-                    });
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => MySchedulePage()));
-                  },
-                  minWidth: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                  color: Color(0xff01A0C7),
-                  child: Text("Schedule", style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0, color: Colors.white, fontWeight: FontWeight.bold),
+                FlatButton(
+                  textColor: Colors.white,
+                  height: 45.0,
+                  color: Colors.lightBlue,
+                  onPressed: () {},
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.email,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        'EMAIL',
+                      )
+                    ],
                   ),
                 ),
 
