@@ -59,62 +59,102 @@ class _MyHomePageState extends State<MyHomePage> {
               SizedBox(
                 height: 20.0,
               ),
-              Material(
-                elevation: 5,
-                color: Colors.lightBlue,
-                borderRadius: BorderRadius.circular(32.0),
+              Container(
+                width: 310,
                 child:
-                MaterialButton(
-                  onPressed: () async {
-                    setState(() {
-                      showProgress = true;
-                    });
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => MySchedulePage()));
-                  },
-                  minWidth: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                  color: Color(0xff01A0C7),
-                  child: Text("Schedule", style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0, color: Colors.white, fontWeight: FontWeight.bold),
+                  Material(
+                    elevation: 5,
+                    color: Colors.lightBlue,
+                    borderRadius: BorderRadius.circular(7.0),
+                    child:
+                    FlatButton(
+                      textColor: Colors.white,
+                      height: 15.0,
+                      color: Colors.lightBlue,
+                      onPressed: () async {
+                        setState(() {
+                          showProgress = true;
+                        });
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => MySchedulePage()));
+                      },
+                      child: Stack(
+                        children: <Widget>[
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Icon(Icons.calendar_today_outlined),
+                          ),
+                          Align(
+                            child: Text(
+                              "Schedule",
+                              style: new TextStyle(
+                                fontSize: 20.0,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-
               ),
               SizedBox(
                 height: 20.0,
               ),
-              Material(
-                elevation: 5,
-                color: Colors.lightBlue,
-                borderRadius: BorderRadius.circular(32.0),
+              Container(
+                width: 310.0,
                 child:
-                MaterialButton(
-                  onPressed: () async {
-                    setState(() {
-                      showProgress = true;
-                    });
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ChatApp(currentUserId: currentUserId)));
-                  },
-                  minWidth: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                  color: Color(0xff01A0C7),
-                  child: Text("Chat", style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0, color: Colors.white, fontWeight: FontWeight.bold),
+                Material(
+                  elevation: 5,
+                  color: Colors.lightBlue,
+                  borderRadius: BorderRadius.circular(7.0),
+                  child:
+                  FlatButton(
+                    textColor: Colors.white,
+                    height: 15.0,
+                    color: Colors.lightBlue,
+                    onPressed: () async {
+                      setState(() {
+                        showProgress = true;
+                      });
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ChatApp(currentUserId: currentUserId)));
+                    },
+                    child: Stack(
+                      children: <Widget>[
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Icon(Icons.chat),
+                        ),
+                        Align(
+                          child: Text(
+                            "Chat",
+                            style: new TextStyle(
+                              fontSize: 20.0,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-
-              ),
+               ),
               SizedBox(
                 height: 20.0,
               ),
+          Container(
+            width: 310,
+            child:
               Material(
                 elevation: 5,
                 color: Colors.lightBlue,
-                borderRadius: BorderRadius.circular(32.0),
+                borderRadius: BorderRadius.circular(7.0),
                 child:
-                MaterialButton(
+                FlatButton(
+                  textColor: Colors.white,
+                  height: 15.0,
+                  color: Colors.lightBlue,
                   onPressed: () async {
                     setState(() {
                       showProgress = true;
@@ -123,14 +163,25 @@ class _MyHomePageState extends State<MyHomePage> {
                         context,
                         MaterialPageRoute(builder: (context) => MyLoginPage()));
                   },
-                  minWidth: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                  color: Color(0xff01A0C7),
-                  child: Text("Logout", style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0, color: Colors.white, fontWeight: FontWeight.bold),
+                  child: Stack(
+                    children: <Widget>[
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Icon(Icons.logout),
+                      ),
+                      Align(
+                        child: Text(
+                          "Logout",
+                          style: new TextStyle(
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 ),
-
               ),
+          ),
               SizedBox(
                 height: 15.0,
               ),
