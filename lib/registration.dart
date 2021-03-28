@@ -33,8 +33,9 @@ class _MyRegistrationPageState extends State<MyRegistrationPage> {
       appBar: AppBar(
         title: Text("Swap App"),
       ),
-      body: Center(
-        child: ModalProgressHUD(
+      body: SingleChildScrollView(
+        child: Center(
+          child: ModalProgressHUD(
           inAsyncCall: showProgress,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -163,6 +164,7 @@ class _MyRegistrationPageState extends State<MyRegistrationPage> {
 
             ],
           ),
+        ),
         ),
       ),
     );
