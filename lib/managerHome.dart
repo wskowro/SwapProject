@@ -186,7 +186,14 @@ class _MyManagerHomePageState extends State<MyManagerHomePage> {
                     textColor: Colors.white,
                     height: 15.0,
                     color: Colors.lightBlue,
-                    onPressed: () {},
+                    onPressed: () async {
+                      setState(() {
+                        showProgress = true;
+                      });
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => MyLoginPage()));
+                    },
                     child: Stack(
                       children: <Widget>[
                         Align(
