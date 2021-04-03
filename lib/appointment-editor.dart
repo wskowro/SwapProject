@@ -1,11 +1,27 @@
 part of event_calendar;
 
+
 class AppointmentEditor extends StatefulWidget {
+
+  final String peerId;
+  final String peerAvatar;
+  final String currentUserId;
+  final String peerName;
+
+  AppointmentEditor({Key key, @required this.peerId, @required this.peerAvatar, @required this.currentUserId, @required this.peerName}) : super(key: key);
+
   @override
-  AppointmentEditorState createState() => AppointmentEditorState();
+  AppointmentEditorState createState() => AppointmentEditorState(peerId: peerId, peerAvatar: peerAvatar, currentUserId: currentUserId);
 }
 
 class AppointmentEditorState extends State<AppointmentEditor> {
+
+  AppointmentEditorState({Key key, @required this.peerId, @required this.peerAvatar,  @required this.currentUserId});
+
+  String peerId;
+  String peerAvatar;
+  String currentUserId;
+
   Widget _getAppointmentEditor(BuildContext context) {
     return Container(
         color: Colors.white,
@@ -314,6 +330,7 @@ class AppointmentEditorState extends State<AppointmentEditor> {
                     ),
                     onPressed: () {
                       final List<Meeting> meetings = <Meeting>[];
+
                       if (_selectedAppointment != null) {
                         _events.appointments.removeAt(
                             _events.appointments.indexOf(_selectedAppointment));
@@ -335,11 +352,22 @@ class AppointmentEditorState extends State<AppointmentEditor> {
                         eventName: _subject == '' ? '(No title)' : _subject,
                       ));
 
+
+
                       _events.appointments.add(meetings[0]);
 
                       _events.notifyListeners(
                           CalendarDataSourceAction.add, meetings);
                       _selectedAppointment = null;
+
+                      String scheduleId = "cal" + peerId;
+
+                      FirebaseFirestore.instance.collection('schedule').doc(scheduleId).collection(scheduleId).doc().set({
+                        'eventName': _subject,
+                        'from': _startDate,
+                        'to': _endDate,
+                        'description': _notes
+                      });
 
                       Navigator.pop(context);
                     })

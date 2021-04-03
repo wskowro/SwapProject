@@ -7,6 +7,8 @@ import 'main.dart';
 import 'home.dart';
 import 'dart:math';
 import 'package:intl/intl.dart';
+import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 part 'color-picker.dart';
 
@@ -143,7 +145,7 @@ class EventCalendarState extends State<EditCalender> {
         Navigator.push<Widget>(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => AppointmentEditor()),
+              builder: (BuildContext context) => AppointmentEditor(currentUserId: currentUserId, peerId: peerId, peerAvatar: peerAvatar, peerName: peerName)),
         );
       }
     });
