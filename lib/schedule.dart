@@ -28,6 +28,8 @@ class MySchedulePage extends StatefulWidget {
   @override
   _MySchedulePageState createState() => _MySchedulePageState(currentUserId: currentUserId);
 }
+
+
 class _MySchedulePageState extends State<MySchedulePage> {
   _MySchedulePageState({Key key, @required this.currentUserId});
   final _auth = FirebaseAuth.instance;

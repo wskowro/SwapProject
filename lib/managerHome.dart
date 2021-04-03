@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'schedule.dart';
 import 'main.dart';
 import 'chat.dart';
+import 'scheduleEdit.dart';
 
 void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
@@ -108,7 +109,14 @@ class _MyManagerHomePageState extends State<MyManagerHomePage> {
                     textColor: Colors.white,
                     height: 15.0,
                     color: Colors.lightBlue,
-                    onPressed: () {},
+                    onPressed: () async {
+                      setState(() {
+                        showProgress = true;
+                      });
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ScheduleEdit(currentUserId: currentUserId)));
+                    },
                     child: Stack(
                       children: <Widget>[
                         Align(

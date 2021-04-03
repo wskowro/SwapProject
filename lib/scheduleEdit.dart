@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'chatScreen.dart';
+import 'editCalender.dart' hide MyApp;
 import 'home.dart' hide MyApp;
 import 'widget/loading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -15,20 +15,19 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'main.dart';
 
-class ChatApp extends StatefulWidget {
+class ScheduleEdit extends StatefulWidget {
   final String currentUserId;
 
-  ChatApp({Key key, @required this.currentUserId}) : super(key: key);
+  ScheduleEdit({Key key, @required this.currentUserId}) : super(key: key);
 
   @override
-  State createState() => ChatAppState(currentUserId: currentUserId);
+  State createState() => ScheduleEditState(currentUserId: currentUserId);
 }
 
-class ChatAppState extends State<ChatApp> {
-  ChatAppState({Key key, @required this.currentUserId});
+class ScheduleEditState extends State<ScheduleEdit> {
+  ScheduleEditState({Key key, @required this.currentUserId});
 
   String currentUserId;
-  final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   final ScrollController listScrollController = ScrollController();
 
@@ -39,33 +38,10 @@ class ChatAppState extends State<ChatApp> {
   @override
   void initState() {
     super.initState();
-    registerNotification();
     configLocalNotification();
     listScrollController.addListener(scrollListener);
   }
 
-  void registerNotification() {
-    firebaseMessaging.requestNotificationPermissions();
-
-    firebaseMessaging.configure(onMessage: (Map<String, dynamic> message) {
-      print('onMessage: $message');
-      Platform.isAndroid ? showNotification(message['notification']) : showNotification(message['aps']['alert']);
-      return;
-    }, onResume: (Map<String, dynamic> message) {
-      print('onResume: $message');
-      return;
-    }, onLaunch: (Map<String, dynamic> message) {
-      print('onLaunch: $message');
-      return;
-    });
-
-    firebaseMessaging.getToken().then((token) {
-      print('token: $token');
-      FirebaseFirestore.instance.collection('users').doc(currentUserId).update({'pushToken': token});
-    }).catchError((err) {
-      Fluttertoast.showToast(msg: err.message.toString());
-    });
-  }
 
   void configLocalNotification() {
     var initializationSettingsAndroid = new AndroidInitializationSettings('app_icon');
@@ -83,33 +59,6 @@ class ChatAppState extends State<ChatApp> {
     }
   }
 
-
-  void showNotification(message) async {
-    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-      Platform.isAndroid ? 'com.dfa.swapApp' : 'com.duytq.swapApp',
-      'Swap App',
-      'Swap App chat channel',
-      playSound: true,
-      enableVibration: true,
-      importance: Importance.Max,
-      priority: Priority.High,
-    );
-    var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
-    var platformChannelSpecifics =
-    new NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-
-    print(message);
-//    print(message['body'].toString());
-//    print(json.encode(message));
-
-    await flutterLocalNotificationsPlugin.show(
-        0, message['title'].toString(), message['body'].toString(), platformChannelSpecifics,
-        payload: json.encode(message));
-
-//    await flutterLocalNotificationsPlugin.show(
-//        0, 'plain title', 'plain body', platformChannelSpecifics,
-//        payload: 'item x');
-  }
 
   Future<bool> onBackPress() {
     openDialog();
@@ -333,10 +282,10 @@ class ChatAppState extends State<ChatApp> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => Chat(
+                    builder: (context) => EditCalender(
                       peerId: document.data()['id'],
                       peerAvatar: document.data()['photoUrl'],
-                        currentUserId: currentUserId,
+                      currentUserId: currentUserId,
                       peerName: document.data()['name'],
                     )));
           },
