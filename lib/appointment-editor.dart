@@ -28,52 +28,8 @@ class AppointmentEditorState extends State<AppointmentEditor> {
         child: ListView(
           padding: const EdgeInsets.all(0),
           children: <Widget>[
-            ListTile(
-              contentPadding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
-              leading: const Text(''),
-              title: TextField(
-                controller: TextEditingController(text: _subject),
-                onChanged: (String value) {
-                  _subject = value;
-                },
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                style: TextStyle(
-                    fontSize: 25,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w400),
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Add title',
-                ),
-              ),
-            ),
-            const Divider(
-              height: 1.0,
-              thickness: 1,
-            ),
-            ListTile(
-                contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
-                leading: Icon(
-                  Icons.access_time,
-                  color: Colors.black54,
-                ),
-                title: Row(children: <Widget>[
-                  const Expanded(
-                    child: Text('All-day'),
-                  ),
-                  Expanded(
-                      child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Switch(
-                            value: _isAllDay,
-                            onChanged: (bool value) {
-                              setState(() {
-                                _isAllDay = value;
-                              });
-                            },
-                          ))),
-                ])),
+
+
             ListTile(
                 contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
                 leading: const Text(''),
@@ -231,48 +187,12 @@ class AppointmentEditorState extends State<AppointmentEditor> {
                                     }
                                   })),
                     ])),
-            ListTile(
-              contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
-              leading: Icon(
-                Icons.public,
-                color: Colors.black87,
-              ),
-              title: Text(_timeZoneCollection[_selectedTimeZoneIndex]),
-              onTap: () {
-                showDialog<Widget>(
-                  context: context,
-                  barrierDismissible: true,
-                  builder: (BuildContext context) {
-                    return _TimeZonePicker();
-                  },
-                ).then((dynamic value) => setState(() {}));
-              },
-            ),
+
             const Divider(
               height: 1.0,
               thickness: 1,
             ),
-            ListTile(
-              contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
-              leading: Icon(Icons.lens,
-                  color: _colorCollection[_selectedColorIndex]),
-              title: Text(
-                _colorNames[_selectedColorIndex],
-              ),
-              onTap: () {
-                showDialog<Widget>(
-                  context: context,
-                  barrierDismissible: true,
-                  builder: (BuildContext context) {
-                    return _ColorPicker();
-                  },
-                ).then((dynamic value) => setState(() {}));
-              },
-            ),
-            const Divider(
-              height: 1.0,
-              thickness: 1,
-            ),
+
             ListTile(
               contentPadding: const EdgeInsets.all(5),
               leading: Icon(
@@ -311,7 +231,7 @@ class AppointmentEditorState extends State<AppointmentEditor> {
         home: Scaffold(
             appBar: AppBar(
               title: Text(getTile()),
-              backgroundColor: _colorCollection[_selectedColorIndex],
+              backgroundColor: Colors.blue,
               leading: IconButton(
                 icon: const Icon(
                   Icons.close,
@@ -340,7 +260,7 @@ class AppointmentEditorState extends State<AppointmentEditor> {
                       meetings.add(Meeting(
                         from: _startDate,
                         to: _endDate,
-                        background: _colorCollection[_selectedColorIndex],
+                        background: Colors.blue,
                         startTimeZone: _selectedTimeZoneIndex == 0
                             ? ''
                             : _timeZoneCollection[_selectedTimeZoneIndex],
@@ -349,7 +269,7 @@ class AppointmentEditorState extends State<AppointmentEditor> {
                             : _timeZoneCollection[_selectedTimeZoneIndex],
                         description: _notes,
                         isAllDay: _isAllDay,
-                        eventName: _subject == '' ? '(No title)' : _subject,
+                        eventName: 'Work',
                       ));
 
 
@@ -361,9 +281,38 @@ class AppointmentEditorState extends State<AppointmentEditor> {
                       _selectedAppointment = null;
 
                       String scheduleId = "cal" + peerId;
+                      String dayOfWeek = "";
+                      if (_startDate.weekday == 1)
+                        {
+                          dayOfWeek = "Monday";
+                        }
+                      else if (_startDate.weekday == 2)
+                        {
+                          dayOfWeek = "Tuesday";
+                        }
+                      else if (_startDate.weekday == 3)
+                      {
+                        dayOfWeek = "Wednesday";
+                      }
+                      else if (_startDate.weekday == 4)
+                      {
+                        dayOfWeek = "Thursday";
+                      }
+                      else if (_startDate.weekday == 5)
+                      {
+                        dayOfWeek = "Friday";
+                      }
+                      else if (_startDate.weekday == 6)
+                      {
+                        dayOfWeek = "Saturday";
+                      }
+                      else
+                      {
+                        dayOfWeek = "Sunday";
+                      }
 
                       FirebaseFirestore.instance.collection('schedule').doc(scheduleId).collection(scheduleId).doc().set({
-                        'eventName': _subject,
+                        'eventName': dayOfWeek,
                         'from': _startDate,
                         'to': _endDate,
                         'description': _notes

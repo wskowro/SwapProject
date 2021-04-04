@@ -77,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         });
                         Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => MySchedulePage()));
+                            MaterialPageRoute(builder: (context) => MySchedulePage(currentUserId: currentUserId)));
                       },
                       child: Stack(
                         children: <Widget>[

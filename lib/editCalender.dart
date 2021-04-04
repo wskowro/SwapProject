@@ -287,6 +287,44 @@ class EventCalendarState extends State<EditCalender> {
     final DateTime today = DateTime.now();
     final Random random = Random();
 
+    List oldSchedule;
+    final scheduleId = "cal" + peerId;
+    CollectionReference _collectionRef =
+    FirebaseFirestore.instance.collection('schedule').doc(scheduleId).collection(scheduleId);
+
+    String myName;
+    DateTime myStartTime;
+    DateTime myEndTime;
+    String myDescription;
+
+    Future<void> getData() async {
+      // Get docs from collection reference
+      QuerySnapshot querySnapshot = await _collectionRef.get();
+
+      // Get data from docs and convert map to List
+      final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+      allData.forEach((daySchedule) {
+        myName = daySchedule["eventName"];
+        print(myName);
+        myStartTime = daySchedule["from"].toDate();
+        print(myStartTime);
+        myEndTime = daySchedule["to"].toDate();
+        print(myEndTime);
+        myDescription = daySchedule["description"];
+        print(myDescription);
+        meetingCollection.add(Meeting(
+          from: myStartTime,
+          to: myEndTime,
+          background: Colors.blue,
+          startTimeZone: '',
+          endTimeZone: '',
+          description: myDescription,
+          isAllDay: false,
+          eventName: myName,
+        ));
+      });
+    }
+    getData();
 
     return meetingCollection;
   }
@@ -326,7 +364,7 @@ class Meeting {
   Meeting(
       {@required this.from,
         @required this.to,
-        this.background = Colors.green,
+        this.background = Colors.blue,
         this.isAllDay = false,
         this.eventName = '',
         this.startTimeZone = '',

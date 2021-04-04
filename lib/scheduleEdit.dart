@@ -1,3 +1,4 @@
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -219,9 +220,6 @@ class ScheduleEditState extends State<ScheduleEdit> {
   }
 
   Widget buildItem(BuildContext context, DocumentSnapshot document) {
-    if (document.data()['id'] == currentUserId) {
-      return Container();
-    } else {
       return Container(
         child: FlatButton(
           child: Row(
@@ -297,7 +295,7 @@ class ScheduleEditState extends State<ScheduleEdit> {
       );
     }
   }
-}
+
 
 class Choice {
   const Choice({this.title, this.icon});

@@ -1,57 +1,195 @@
+//part of event_calendar;
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'main.dart';
 import 'home.dart';
-import 'chat.dart';
+import 'dart:math';
+import 'package:intl/intl.dart';
+import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'editCalender.dart';
 
-void main() => runApp(MyApp());
-class MyApp extends StatelessWidget {
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'SwapApp',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MySchedulePage(),
-    );
-  }
-}
+
 
 class MySchedulePage extends StatefulWidget {
   final String currentUserId;
 
   MySchedulePage({Key key, @required this.currentUserId}) : super(key: key);
-  @override
-  _MySchedulePageState createState() => _MySchedulePageState(currentUserId: currentUserId);
+
+  EventCalendarState createState() => EventCalendarState(currentUserId: currentUserId);
 }
 
+List<Color> _colorCollection;
+List<String> _colorNames;
+int _selectedColorIndex = 0;
+int _selectedTimeZoneIndex = 0;
+List<String> _timeZoneCollection;
+DataSource _events;
+Meeting _selectedAppointment;
+DateTime _startDate;
+TimeOfDay _startTime;
+DateTime _endDate;
+TimeOfDay _endTime;
+bool _isAllDay;
+String _subject = '';
+String _notes = '';
 
-class _MySchedulePageState extends State<MySchedulePage> {
-  _MySchedulePageState({Key key, @required this.currentUserId});
-  final _auth = FirebaseAuth.instance;
-  String currentUserId;
-  bool showProgress = false;
+class EventCalendarState extends State<MySchedulePage> {
+  EventCalendarState({Key key,@required this.currentUserId});
+
+  final String currentUserId;
+  CalendarView _calendarView;
+  List<String> eventNameCollection;
+  List<Meeting> appointments;
 
   @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: SfCalendar(
-              view: CalendarView.week,
-            ),
-          )
-        ),
-      )
-    );
+  void initState() {
+    _calendarView = CalendarView.month;
+    appointments = getMeetingDetails();
+    _events = DataSource(appointments);
+    _selectedAppointment = null;
+    _selectedColorIndex = 0;
+    _selectedTimeZoneIndex = 0;
+    _subject = '';
+    _notes = '';
+    super.initState();
   }
 
+  @override
+  Widget build([BuildContext context]) {
+    return Scaffold(
+        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomPadding: false,
+        appBar: AppBar(
+          title: Text(
+            'My Schedule',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+        ),
+        body: Padding(
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+            child: getEventCalendar(_calendarView, _events)));
+  }
+
+  SfCalendar getEventCalendar(
+      [CalendarView _calendarView,
+        CalendarDataSource _calendarDataSource,
+        CalendarTapCallback calendarTapCallback]) {
+    return SfCalendar(
+        view: CalendarView.week,
+        dataSource: _calendarDataSource,
+        onTap: calendarTapCallback,
+        initialDisplayDate: DateTime(DateTime.now().year, DateTime.now().month,
+            DateTime.now().day, 0, 0, 0),
+        monthViewSettings: MonthViewSettings(
+            appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
+        timeSlotViewSettings: TimeSlotViewSettings(
+            startHour: 8,
+            endHour: 20,
+            minimumAppointmentDuration: const Duration(minutes: 60)));
+  }
+
+
+
+
+  List<Meeting> getMeetingDetails() {
+    final List<Meeting> meetingCollection = <Meeting>[];
+    eventNameCollection = <String>[];
+
+    List oldSchedule;
+    final scheduleId = "cal" + currentUserId;
+    CollectionReference _collectionRef =
+    FirebaseFirestore.instance.collection('schedule').doc(scheduleId).collection(scheduleId);
+
+    String myName;
+    DateTime myStartTime;
+    DateTime myEndTime;
+    String myDescription;
+
+    Future<void> getData() async {
+      // Get docs from collection reference
+      QuerySnapshot querySnapshot = await _collectionRef.get();
+
+      // Get data from docs and convert map to List
+      final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+      allData.forEach((daySchedule) {
+        myName = daySchedule["eventName"];
+        print(myName);
+        myStartTime = daySchedule["from"].toDate();
+        print(myStartTime);
+        myEndTime = daySchedule["to"].toDate();
+        print(myEndTime);
+        myDescription = daySchedule["description"];
+        print(myDescription);
+        meetingCollection.add(Meeting(
+          from: myStartTime,
+          to: myEndTime,
+          background: Colors.blue,
+          startTimeZone: '',
+          endTimeZone: '',
+          description: myDescription,
+          isAllDay: false,
+          eventName: myName,
+        ));
+      });
+    }
+    getData();
+
+    return meetingCollection;
+  }
+}
+
+class DataSource extends CalendarDataSource {
+  DataSource(List<Meeting> source) {
+    appointments = source;
+  }
+
+  @override
+  bool isAllDay(int index) => appointments[index].isAllDay;
+
+  @override
+  String getSubject(int index) => appointments[index].eventName;
+
+  @override
+  String getStartTimeZone(int index) => appointments[index].startTimeZone;
+
+  @override
+  String getNotes(int index) => appointments[index].description;
+
+  @override
+  String getEndTimeZone(int index) => appointments[index].endTimeZone;
+
+  @override
+  Color getColor(int index) => appointments[index].background;
+
+  @override
+  DateTime getStartTime(int index) => appointments[index].from;
+
+  @override
+  DateTime getEndTime(int index) => appointments[index].to;
+}
+
+class Meeting {
+  Meeting(
+      {@required this.from,
+        @required this.to,
+        this.background = Colors.blue,
+        this.isAllDay = false,
+        this.eventName = '',
+        this.startTimeZone = '',
+        this.endTimeZone = '',
+        this.description = ''});
+
+  final String eventName;
+  final DateTime from;
+  final DateTime to;
+  final Color background;
+  final bool isAllDay;
+  final String startTimeZone;
+  final String endTimeZone;
+  final String description;
 }
