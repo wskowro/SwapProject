@@ -284,31 +284,31 @@ class AppointmentEditorState extends State<AppointmentEditor> {
                       String dayOfWeek = "";
                       if (_startDate.weekday == 1)
                         {
-                          dayOfWeek = "Monday";
+                          dayOfWeek = "Mon";
                         }
                       else if (_startDate.weekday == 2)
                         {
-                          dayOfWeek = "Tuesday";
+                          dayOfWeek = "Tue";
                         }
                       else if (_startDate.weekday == 3)
                       {
-                        dayOfWeek = "Wednesday";
+                        dayOfWeek = "Wed";
                       }
                       else if (_startDate.weekday == 4)
                       {
-                        dayOfWeek = "Thursday";
+                        dayOfWeek = "Thur";
                       }
                       else if (_startDate.weekday == 5)
                       {
-                        dayOfWeek = "Friday";
+                        dayOfWeek = "Fri";
                       }
                       else if (_startDate.weekday == 6)
                       {
-                        dayOfWeek = "Saturday";
+                        dayOfWeek = "Sat";
                       }
                       else
                       {
-                        dayOfWeek = "Sunday";
+                        dayOfWeek = "Sun";
                       }
 
                       FirebaseFirestore.instance.collection('schedule').doc(scheduleId).collection(scheduleId).doc().set({

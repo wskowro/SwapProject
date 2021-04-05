@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'editCalender.dart';
+import 'widget/loading.dart';
 
 
 
@@ -48,7 +49,12 @@ class EventCalendarState extends State<MySchedulePage> {
   @override
   void initState() {
     _calendarView = CalendarView.month;
-    appointments = getMeetingDetails();
+    getData().then((appointments){
+      setState(() {
+        this.appointments = appointments;
+      });
+    });
+    print(appointments);
     _events = DataSource(appointments);
     _selectedAppointment = null;
     _selectedColorIndex = 0;
@@ -60,20 +66,22 @@ class EventCalendarState extends State<MySchedulePage> {
 
   @override
   Widget build([BuildContext context]) {
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        resizeToAvoidBottomPadding: false,
-        appBar: AppBar(
-          title: Text(
-            'My Schedule',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+    _events = DataSource(appointments);
+      return Scaffold(
+          resizeToAvoidBottomInset: false,
+          resizeToAvoidBottomPadding: false,
+          appBar: AppBar(
+            title: Text(
+              'My Schedule',
+              style: TextStyle(
+                  color: Colors.black, fontWeight: FontWeight.bold),
+            ),
+            centerTitle: true,
           ),
-          centerTitle: true,
-        ),
-        body: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-            child: getEventCalendar(_calendarView, _events)));
-  }
+          body: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+              child: getEventCalendar(_calendarView, _events)));
+    }
 
   SfCalendar getEventCalendar(
       [CalendarView _calendarView,
@@ -94,52 +102,45 @@ class EventCalendarState extends State<MySchedulePage> {
   }
 
 
+  Future<List<Meeting>> getData() async {
 
-
-  List<Meeting> getMeetingDetails() {
-    final List<Meeting> meetingCollection = <Meeting>[];
-    eventNameCollection = <String>[];
-
-    List oldSchedule;
+    List<Meeting> oldSchedule = <Meeting>[];
     final scheduleId = "cal" + currentUserId;
     CollectionReference _collectionRef =
     FirebaseFirestore.instance.collection('schedule').doc(scheduleId).collection(scheduleId);
-
     String myName;
     DateTime myStartTime;
     DateTime myEndTime;
     String myDescription;
+    // Get docs from collection reference
+    QuerySnapshot querySnapshot = await _collectionRef.get();
 
-    Future<void> getData() async {
-      // Get docs from collection reference
-      QuerySnapshot querySnapshot = await _collectionRef.get();
+    // Get data from docs and convert map to List
+    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    allData.forEach((daySchedule) {
+      myName = daySchedule["eventName"];
+      //print(myName);
+      myStartTime = daySchedule["from"].toDate();
+      //print(myStartTime);
+      myEndTime = daySchedule["to"].toDate();
+      //print(myEndTime);
+      myDescription = daySchedule["description"];
+      //print(myDescription);
 
-      // Get data from docs and convert map to List
-      final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-      allData.forEach((daySchedule) {
-        myName = daySchedule["eventName"];
-        print(myName);
-        myStartTime = daySchedule["from"].toDate();
-        print(myStartTime);
-        myEndTime = daySchedule["to"].toDate();
-        print(myEndTime);
-        myDescription = daySchedule["description"];
-        print(myDescription);
-        meetingCollection.add(Meeting(
-          from: myStartTime,
-          to: myEndTime,
-          background: Colors.blue,
-          startTimeZone: '',
-          endTimeZone: '',
-          description: myDescription,
-          isAllDay: false,
-          eventName: myName,
-        ));
-      });
-    }
-    getData();
+      oldSchedule.add(Meeting(
+        from: myStartTime,
+        to: myEndTime,
+        background: Colors.blue,
+        startTimeZone: '',
+        endTimeZone: '',
+        description: myDescription,
+        isAllDay: false,
+        eventName: myName,
+      ));
+      //print(oldSchedule);
+    });
 
-    return meetingCollection;
+    return oldSchedule;
   }
 }
 
