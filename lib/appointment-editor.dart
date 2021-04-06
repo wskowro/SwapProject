@@ -224,6 +224,21 @@ class AppointmentEditorState extends State<AppointmentEditor> {
         ));
   }
 
+  Future<void> deleteData(String dayName) async {
+    final scheduleId = "cal" + peerId;
+    FirebaseFirestore.instance
+        .collection("schedule").doc(scheduleId).collection(scheduleId)
+        .where("eventName", isEqualTo: dayName)
+        .get().then((value) {
+      value.docs.forEach((element) {
+        FirebaseFirestore.instance.collection("schedule").doc(scheduleId)
+            .collection(scheduleId).doc(element.id).delete()
+            .then((value) {
+        });
+      });
+    });
+  }
+
   @override
   Widget build([BuildContext context]) {
     return MaterialApp(
@@ -269,7 +284,7 @@ class AppointmentEditorState extends State<AppointmentEditor> {
                             : _timeZoneCollection[_selectedTimeZoneIndex],
                         description: _notes,
                         isAllDay: _isAllDay,
-                        eventName: 'Work',
+                        eventName: DateFormat('EEEE').format(_startDate).substring(0,3),
                       ));
 
 
@@ -333,6 +348,7 @@ class AppointmentEditorState extends State<AppointmentEditor> {
                 : FloatingActionButton(
                     onPressed: () {
                       if (_selectedAppointment != null) {
+                        deleteData(_selectedAppointment.eventName);
                         _events.appointments.removeAt(
                             _events.appointments.indexOf(_selectedAppointment));
                         _events.notifyListeners(CalendarDataSourceAction.remove,

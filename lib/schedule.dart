@@ -1,4 +1,3 @@
-//part of event_calendar;
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,6 +10,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'editCalender.dart';
 import 'widget/loading.dart';
+import 'changeRequest.dart';
 
 
 
@@ -79,8 +79,18 @@ class EventCalendarState extends State<MySchedulePage> {
             centerTitle: true,
           ),
           body: Padding(
-              padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-              child: getEventCalendar(_calendarView, _events)));
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                  child: getEventCalendar(_calendarView, _events, onCalendarTapped)),
+
+      );
+    }
+
+  void onCalendarTapped(CalendarTapDetails calendarTapDetails) {
+    Navigator.push<Widget>(
+      context,
+      MaterialPageRoute(
+          builder: (BuildContext context) => ChangeRequest(currentUserId: currentUserId)),
+    );
     }
 
   SfCalendar getEventCalendar(

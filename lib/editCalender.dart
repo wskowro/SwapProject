@@ -16,6 +16,7 @@ part 'timezone-picker.dart';
 
 part 'appointment-editor.dart';
 
+
 class EditCalender extends StatefulWidget {
   final String peerId;
   final String peerAvatar;
@@ -131,8 +132,7 @@ class EventCalendarState extends State<EditCalender> {
           _startDate = meetingDetails.from;
           _endDate = meetingDetails.to;
           _isAllDay = meetingDetails.isAllDay;
-          _selectedColorIndex =
-              _colorCollection.indexOf(meetingDetails.background);
+          _selectedColorIndex = 0;
           _selectedTimeZoneIndex = meetingDetails.startTimeZone == ''
               ? 0
               : _timeZoneCollection.indexOf(meetingDetails.startTimeZone);
@@ -141,6 +141,8 @@ class EventCalendarState extends State<EditCalender> {
               : meetingDetails.eventName;
           _notes = meetingDetails.description;
           _selectedAppointment = meetingDetails;
+          //deleteData(meetingDetails.eventName);
+
         } else {
           final DateTime date = calendarTapDetails.date;
           _startDate = date;
@@ -155,6 +157,21 @@ class EventCalendarState extends State<EditCalender> {
               builder: (BuildContext context) => AppointmentEditor(currentUserId: currentUserId, peerId: peerId, peerAvatar: peerAvatar, peerName: peerName)),
         );
       }
+    });
+  }
+
+  Future<void> deleteData(String dayName) async {
+    final scheduleId = "cal" + peerId;
+    FirebaseFirestore.instance
+        .collection("schedule").doc(scheduleId).collection(scheduleId)
+        .where("eventName", isEqualTo: dayName)
+        .get().then((value) {
+      value.docs.forEach((element) {
+        FirebaseFirestore.instance.collection("schedule").doc(scheduleId)
+            .collection(scheduleId).doc(element.id).delete()
+            .then((value) {
+        });
+      });
     });
   }
 
