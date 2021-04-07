@@ -100,8 +100,10 @@ class ChangeRequestState extends State<ChangeRequest> {
 
       //show list of users not working that day as buttons or dropdown
       return Scaffold(
-          body: Column(
-            children: <Widget>[
+          body: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget> [
               DropdownButton(
                 hint: Text('Who would you like to swap with'),
                 value: selectedName,
@@ -112,34 +114,63 @@ class ChangeRequestState extends State<ChangeRequest> {
                   });
                 },
                 items: userNames.map((location) {
+                  getDates(selectedName);
                   return DropdownMenuItem(
                     child: new Text(location),
                     value: location,
                   );
                 }).toList(),
               ),
+            SizedBox(
+              height: 20.0,
+            ),
+            Container(
+              width: 310,
+              child:
+              Material(
+                elevation: 5,
+                color: Colors.lightBlue,
+                borderRadius: BorderRadius.circular(7.0),
+                child:
+                FlatButton(
+                  textColor: Colors.white,
+                  height: 15.0,
+                  color: Colors.lightBlue,
+                  onPressed: () async {
+                    setState(() {
 
-              //show selected users scheduled days other then selected day and ones current user isn't already working
-              selectedName != "" ? DropdownButton(
-                hint: Text('What shift would you like to swap'),
-                value: selectedShift,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedShift = newValue;
-                  });
-                },
-                items: getDates(selectedName).map((location) {
-                  return DropdownMenuItem(
-                    child: new Text(location),
-                    value: location,
-                  );
-                }).toList(),
-              ) : Container()
-            ],
+                    });
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MySchedulePage(currentUserId: currentUserId)));
+                  },
+                  child: Stack(
+                    children: <Widget>[
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Icon(Icons.calendar_today_outlined),
+                      ),
+                      Align(
+                        child: Text(
+                          "Submit",
+                          style: new TextStyle(
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            ]),
           )
       );
     }
 
+
+
+    //show selected users scheduled days other then selected day and ones current user isn't already working
 
     //add document containing both user IDs and both days that will be switched
 
@@ -171,4 +202,59 @@ class ChangeRequestState extends State<ChangeRequest> {
 
 }
 
+class ChangeRequestSecond extends StatefulWidget {
+  final String currentUserId;
+  final String shiftDay;
+
+  ChangeRequestSecond({Key key, @required this.currentUserId, @required this.shiftDay}) : super(key: key);
+
+  @override
+  State createState() => ChangeRequestSecondState(currentUserId: currentUserId, shiftDay: shiftDay);
+}
+
+class ChangeRequestSecondState extends State<ChangeRequestSecond> {
+  ChangeRequestSecondState({Key key, @required this.currentUserId, @required this.shiftDay});
+
+  String currentUserId;
+  String shiftDay;
+  List userList = [];
+  List userNames = [];
+  String selectedName;
+  String selectedShift;
+  List swapDays;
+
+  void initState() {
+    getUsers().then((myUsers){
+      setState(() {
+      });
+    });
+    super.initState();
+  }
+
+  List getDates(String name) {
+    String myID;
+    String calID;
+    List myDays;
+    for (int x = 0; x < userNames.length; x++) {
+      if (userNames.elementAt(x) == name) {
+        myID = userList.elementAt(x);
+      }
+    }
+    calID = 'cal' + myID;
+    // Get docs from collection reference
+    FirebaseFirestore.instance.collection('schedule').doc(calID).collection(
+        calID).get().then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        myDays.add(doc["eventName"]);
+      });
+    }
+    );
+    return myDays;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
 

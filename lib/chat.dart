@@ -36,6 +36,7 @@ class ChatAppState extends State<ChatApp> {
   int _limit = 20;
   int _limitIncrement = 20;
   bool isLoading = false;
+  bool showProgress = false;
 
   @override
   void initState() {

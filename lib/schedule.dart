@@ -70,7 +70,7 @@ class EventCalendarState extends State<MySchedulePage> {
     _events = DataSource(appointments);
       return Scaffold(
           resizeToAvoidBottomInset: false,
-          resizeToAvoidBottomPadding: false,
+          //resizeToAvoidBottomPadding: false,
           appBar: AppBar(
             title: Text(
               'My Schedule',

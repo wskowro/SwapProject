@@ -78,7 +78,7 @@ class EventCalendarState extends State<EditCalender> {
     _events = DataSource(appointments);
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        resizeToAvoidBottomPadding: false,
+        //: false,
         appBar: AppBar(
           title: Text(
             peerName,
