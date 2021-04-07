@@ -45,6 +45,7 @@ class EventCalendarState extends State<MySchedulePage> {
   CalendarView _calendarView;
   List<String> eventNameCollection;
   List<Meeting> appointments;
+  String shiftDay;
 
   @override
   void initState() {
@@ -89,7 +90,7 @@ class EventCalendarState extends State<MySchedulePage> {
     Navigator.push<Widget>(
       context,
       MaterialPageRoute(
-          builder: (BuildContext context) => ChangeRequest(currentUserId: currentUserId)),
+          builder: (BuildContext context) => ChangeRequest(currentUserId: currentUserId, shiftDay: shiftDay)),
     );
     }
 
