@@ -37,6 +37,10 @@ TimeOfDay _endTime;
 bool _isAllDay;
 String _subject = '';
 String _notes = '';
+String myName;
+DateTime myStartTime;
+DateTime myEndTime;
+String myDescription;
 
 class EventCalendarState extends State<MySchedulePage> {
   EventCalendarState({Key key,@required this.currentUserId});
@@ -46,6 +50,8 @@ class EventCalendarState extends State<MySchedulePage> {
   List<String> eventNameCollection;
   List<Meeting> appointments;
   String shiftDay;
+  DateTime shiftStart;
+  DateTime shiftEnd;
 
   @override
   void initState() {
@@ -87,11 +93,27 @@ class EventCalendarState extends State<MySchedulePage> {
     }
 
   void onCalendarTapped(CalendarTapDetails calendarTapDetails) {
-    Navigator.push<Widget>(
-      context,
-      MaterialPageRoute(
-          builder: (BuildContext context) => ChangeRequest(currentUserId: currentUserId, shiftDay: shiftDay)),
-    );
+    if (calendarTapDetails.targetElement != CalendarElement.calendarCell &&
+        calendarTapDetails.targetElement != CalendarElement.appointment) {
+      return;
+    } else {
+      if (calendarTapDetails.appointments != null &&
+          calendarTapDetails.appointments.length == 1) {
+            final Meeting meetingDetails = calendarTapDetails.appointments[0];
+            shiftDay = meetingDetails.eventName;
+            shiftStart = meetingDetails.from;
+            shiftEnd = meetingDetails.to;
+
+              Navigator.push<Widget>(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        ChangeRequest(
+                            currentUserId: currentUserId, shiftDay: shiftDay, shiftStart: shiftStart, shiftEnd: shiftEnd)),
+        );
+      }
+      }
+
     }
 
   SfCalendar getEventCalendar(
@@ -119,10 +141,7 @@ class EventCalendarState extends State<MySchedulePage> {
     final scheduleId = "cal" + currentUserId;
     CollectionReference _collectionRef =
     FirebaseFirestore.instance.collection('schedule').doc(scheduleId).collection(scheduleId);
-    String myName;
-    DateTime myStartTime;
-    DateTime myEndTime;
-    String myDescription;
+
     // Get docs from collection reference
     QuerySnapshot querySnapshot = await _collectionRef.get();
 
