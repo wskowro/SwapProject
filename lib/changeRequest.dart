@@ -66,20 +66,20 @@ class ChangeRequestState extends State<ChangeRequest> {
       scheduleID = 'cal' + userList.elementAt(x);
       CollectionReference _collectionRef =
       FirebaseFirestore.instance.collection('schedule').doc(scheduleID).collection(scheduleID);
-      QuerySnapshot querySnapshot = await _collectionRef.get();
-      final allUsers = querySnapshot.docs.map((doc) => doc.data()).toList();
+      QuerySnapshot querySnapshot2 = await _collectionRef.get();
+      final allUsers = querySnapshot2.docs.map((doc) => doc.data()).toList();
       allUsers.forEach((users)
       {
-          print('3');
-          if (users["eventName"] == shiftDay) {
-            print('4');
-            print(userList.elementAt(x));
-            userList.removeAt(x);
-            print(userNames.elementAt(x));
-            userNames.removeAt(x);
-          }
-        });
-      }
+        print('3');
+        if (users["eventName"] == shiftDay) {
+          print('4');
+          print(userList.elementAt(x));
+          userList.removeAt(x);
+          print(userNames.elementAt(x));
+          userNames.removeAt(x);
+        }
+      });
+    }
     }
 
 
@@ -97,7 +97,9 @@ class ChangeRequestState extends State<ChangeRequest> {
         }
       }
 
-      //getAvailable();
+
+
+
       //print(userList);
       //print(userNames);
       //print('test1');
@@ -179,9 +181,9 @@ class ChangeRequestState extends State<ChangeRequest> {
 
 
 
-    //show selected users scheduled days other then selected day and ones current user isn't already working
 
-    //add document containing both user IDs and both days that will be switched
+
+
 
 
     /////////////////////////////////////////////////// New Page
@@ -279,13 +281,23 @@ class ChangeRequestSecondState extends State<ChangeRequestSecond> {
 
     return myDays;
   }
-
+  //show selected users scheduled days other then selected day and ones current user isn't already working
   @override
   Widget build(BuildContext context) {
     print(currentUserId);
     print(shiftDay);
     print(userName);
     print(myName);
+
+    for (int x = 0; x < userDays.length; x++)
+      {
+        if (userDays.elementAt(x) == shiftDay)
+          {
+            userDays.removeAt(x);
+          }
+      }
+
+
     return Scaffold(
       body: Center(
         child: Column(children: <Widget>[
@@ -322,7 +334,7 @@ class ChangeRequestSecondState extends State<ChangeRequestSecond> {
             padding: EdgeInsets.only(top: 30, bottom: 30),
           ),
 
-
+          //add document containing both user IDs and both days that will be switched
           FlatButton(
             textColor: Colors.white,
             height: 15.0,

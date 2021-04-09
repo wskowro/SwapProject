@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:scheduleapp_capstone/managerReqMailbox.dart';
 import 'schedule.dart';
 import 'main.dart';
 import 'chat.dart';
@@ -73,7 +74,14 @@ class _MyManagerHomePageState extends State<MyManagerHomePage> {
                   textColor: Colors.white,
                   height: 15.0,
                   color: Colors.lightBlue,
-                  onPressed: () {},
+                  onPressed: () async {
+                    setState(() {
+                      showProgress = true;
+                    });
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ManagerReqMailbox(currentUserId: currentUserId)));
+                  },
                   child: Stack(
                     children: <Widget>[
                       Align(
@@ -82,7 +90,7 @@ class _MyManagerHomePageState extends State<MyManagerHomePage> {
                       ),
                       Align(
                         child: Text(
-                          "Schedule",
+                          "Requests",
                           style: new TextStyle(
                             fontSize: 20.0,
                           ),

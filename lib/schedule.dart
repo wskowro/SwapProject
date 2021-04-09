@@ -52,6 +52,7 @@ class EventCalendarState extends State<MySchedulePage> {
   String shiftDay;
   DateTime shiftStart;
   DateTime shiftEnd;
+  String docRef;
 
   @override
   void initState() {

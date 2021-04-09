@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'schedule.dart';
 import 'main.dart';
 import 'chat.dart';
+import 'requestMailBox.dart';
 
 void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
@@ -55,6 +56,48 @@ class _MyHomePageState extends State<MyHomePage> {
               Text(
                 "Home Page",
                 style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20.0),
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              Container(
+                width: 310,
+                child:
+                Material(
+                  elevation: 5,
+                  color: Colors.lightBlue,
+                  borderRadius: BorderRadius.circular(7.0),
+                  child:
+                  FlatButton(
+                    textColor: Colors.white,
+                    height: 15.0,
+                    color: Colors.lightBlue,
+                    onPressed: () async {
+                      setState(() {
+                        showProgress = true;
+                      });
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => RequestMailBox(currentUserId: currentUserId)));
+                    },
+                    child: Stack(
+                      children: <Widget>[
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Icon(Icons.calendar_today_outlined),
+                        ),
+                        Align(
+                          child: Text(
+                            "Request",
+                            style: new TextStyle(
+                              fontSize: 20.0,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
               ),
               SizedBox(
                 height: 20.0,
