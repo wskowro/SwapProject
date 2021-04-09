@@ -12,6 +12,7 @@ import 'home.dart' hide MyApp;
 import 'widget/loading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'managerHome.dart'hide MyApp;
 
 
 import 'main.dart';
@@ -197,10 +198,19 @@ class ChatAppState extends State<ChatApp> {
       case 0:
         break;
       case 1:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => MyHomePage(currentUserId: currentUserId)),
-        );
+        if (currentUserId == 'EPJBgIzeSDNAfnSxXBqIZSR6foC2') {
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) =>
+                  MyManagerHomePage(currentUserId: currentUserId)));
+        }
+        else
+        {
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) =>
+                  MyHomePage(currentUserId: currentUserId)));
+        }
         break;
     }
   }

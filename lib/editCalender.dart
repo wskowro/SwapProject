@@ -1,13 +1,8 @@
 library event_calendar;
 import 'package:flutter/material.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'main.dart';
-import 'home.dart';
 import 'dart:math';
 import 'package:intl/intl.dart';
-import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 part 'color-picker.dart';

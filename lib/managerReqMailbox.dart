@@ -1,22 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'schedule.dart';
 import 'widget/loading.dart';
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
-import 'chatScreen.dart';
 import 'home.dart' hide MyApp;
-import 'widget/loading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'main.dart';
 import 'package:intl/intl.dart';
+import 'managerHome.dart' hide MyApp;
 
 class ManagerReqMailbox extends StatefulWidget {
   final String currentUserId;
@@ -169,10 +161,19 @@ class ManagerReqMailboxState extends State<ManagerReqMailbox> {
       case 0:
         break;
       case 1:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => MyHomePage(currentUserId: currentUserId)),
-        );
+        if (currentUserId == 'EPJBgIzeSDNAfnSxXBqIZSR6foC2') {
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) =>
+                  MyManagerHomePage(currentUserId: currentUserId)));
+        }
+        else
+        {
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) =>
+                  MyHomePage(currentUserId: currentUserId)));
+        }
         break;
     }
   }

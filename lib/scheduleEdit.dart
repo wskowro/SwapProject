@@ -1,19 +1,13 @@
 
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'editCalender.dart' hide MyApp;
 import 'home.dart' hide MyApp;
 import 'widget/loading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'scheduleEdit.dart';
-
 import 'main.dart';
 
 class ScheduleEdit extends StatefulWidget {
