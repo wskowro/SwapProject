@@ -95,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           right: 11,
                           top: 3,
                           child: new Container(
-                            padding: EdgeInsets.all(4),
+                            padding: EdgeInsets.fromLTRB(7,4,7,4),
                             decoration: new BoxDecoration(
                               color: Colors.red,
                               borderRadius: BorderRadius.circular(6),
