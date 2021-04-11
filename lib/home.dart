@@ -6,20 +6,6 @@ import 'main.dart';
 import 'chat.dart';
 import 'requestMailBox.dart';
 
-void main() => runApp(MyApp());
-class MyApp extends StatelessWidget {
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'SwapApp',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(),
-    );
-  }
-}
 class MyHomePage extends StatefulWidget {
 
   final String currentUserId;
@@ -74,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: Colors.lightBlue,
                     onPressed: () async {
                       setState(() {
-                        showProgress = true;
+                        //showProgress = true;
                       });
                       Navigator.push(
                           context,
@@ -116,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       color: Colors.lightBlue,
                       onPressed: () async {
                         setState(() {
-                          showProgress = true;
+                          //showProgress = true;
                         });
                         Navigator.push(
                             context,
@@ -158,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: Colors.lightBlue,
                     onPressed: () async {
                       setState(() {
-                        showProgress = true;
+                        //showProgress = true;
                       });
                       Navigator.push(
                           context,
@@ -200,7 +186,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Colors.lightBlue,
                   onPressed: () async {
                     setState(() {
-                      showProgress = true;
+                      //showProgress = true;
                     });
                     Navigator.push(
                         context,

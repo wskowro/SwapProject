@@ -75,7 +75,7 @@ class _MyManagerHomePageState extends State<MyManagerHomePage> {
                   color: Colors.lightBlue,
                   onPressed: () async {
                     setState(() {
-                      showProgress = true;
+                      //showProgress = true;
                     });
                     Navigator.push(
                         context,
@@ -118,7 +118,7 @@ class _MyManagerHomePageState extends State<MyManagerHomePage> {
                     color: Colors.lightBlue,
                     onPressed: () async {
                       setState(() {
-                        showProgress = true;
+                        //showProgress = true;
                       });
                       Navigator.push(
                           context,
@@ -161,7 +161,7 @@ class _MyManagerHomePageState extends State<MyManagerHomePage> {
                     color: Colors.lightBlue,
                     onPressed: () async {
                       setState(() {
-                        showProgress = true;
+                        //showProgress = true;
                       });
                       Navigator.push(
                           context,
@@ -203,7 +203,7 @@ class _MyManagerHomePageState extends State<MyManagerHomePage> {
                     color: Colors.lightBlue,
                     onPressed: () async {
                       setState(() {
-                        showProgress = true;
+                        //showProgress = true;
                       });
                       Navigator.push(
                           context,

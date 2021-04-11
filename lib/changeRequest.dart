@@ -108,18 +108,18 @@ class ChangeRequestState extends State<ChangeRequest> {
           body: Center(
             child: Column(children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(top: 30, bottom: 30),
+                padding: EdgeInsets.only(top: 250, bottom: 30),
               ),
 
               DropdownButton<String>(
                 value: selectedName,
                 icon: Icon(Icons.arrow_drop_down),
-                iconSize: 24,
-                elevation: 16,
-                style: TextStyle(color: Colors.red, fontSize: 18),
+                iconSize: 40,
+                elevation: 50,
+                style: TextStyle(color: Colors.blue, fontSize: 30),
                 underline: Container(
                   height: 2,
-                  color: Colors.deepPurpleAccent,
+                  color: Colors.black,
                 ),
                 onChanged: (String data) {
                   setState(() {
@@ -139,10 +139,18 @@ class ChangeRequestState extends State<ChangeRequest> {
               ),
 
               Padding(
-                  padding: EdgeInsets.only(top: 30, bottom: 30),
+                  padding: EdgeInsets.only(top: 200, bottom: 30),
               ),
 
 
+              Container(
+                width: 310,
+                child:
+                Material(
+                  elevation: 5,
+                  color: Colors.lightBlue,
+                  borderRadius: BorderRadius.circular(7.0),
+                  child:
               FlatButton(
                 textColor: Colors.white,
                 height: 15.0,
@@ -162,7 +170,7 @@ class ChangeRequestState extends State<ChangeRequest> {
                     ),
                     Align(
                       child: Text(
-                        "Schedule",
+                        "Submit",
                         style: new TextStyle(
                           fontSize: 20.0,
                         ),
@@ -171,6 +179,8 @@ class ChangeRequestState extends State<ChangeRequest> {
                   ],
                 ),
               ),
+        ),
+      ),
 
             ]),
           ),
@@ -302,18 +312,18 @@ class ChangeRequestSecondState extends State<ChangeRequestSecond> {
       body: Center(
         child: Column(children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(top: 30, bottom: 30),
+            padding: EdgeInsets.only(top: 250, bottom: 30),
           ),
 
           DropdownButton<String>(
             value: pickedDay,
             icon: Icon(Icons.arrow_drop_down),
-            iconSize: 24,
-            elevation: 16,
-            style: TextStyle(color: Colors.red, fontSize: 18),
+            iconSize: 40,
+            elevation: 50,
+            style: TextStyle(color: Colors.blue, fontSize: 30),
             underline: Container(
               height: 2,
-              color: Colors.deepPurpleAccent,
+              color: Colors.black,
             ),
             onChanged: (String data) {
               setState(() {
@@ -331,10 +341,18 @@ class ChangeRequestSecondState extends State<ChangeRequestSecond> {
           ),
 
           Padding(
-            padding: EdgeInsets.only(top: 30, bottom: 30),
+            padding: EdgeInsets.only(top: 200, bottom: 30),
           ),
 
           //add document containing both user IDs and both days that will be switched
+          Container(
+            width: 310,
+            child:
+            Material(
+              elevation: 5,
+              color: Colors.lightBlue,
+              borderRadius: BorderRadius.circular(7.0),
+              child:
           FlatButton(
             textColor: Colors.white,
             height: 15.0,
@@ -367,7 +385,7 @@ class ChangeRequestSecondState extends State<ChangeRequestSecond> {
                 ),
                 Align(
                   child: Text(
-                    "Schedule",
+                    "Submit",
                     style: new TextStyle(
                       fontSize: 20.0,
                     ),
@@ -376,6 +394,8 @@ class ChangeRequestSecondState extends State<ChangeRequestSecond> {
               ],
             ),
           ),
+    ),
+    ),
 
         ]),
       ),
