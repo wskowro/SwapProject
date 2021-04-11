@@ -5,6 +5,7 @@ import 'package:scheduleapp_capstone/managerReqMailbox.dart';
 import 'main.dart';
 import 'chat.dart';
 import 'scheduleEdit.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
 }
 class MyManagerHomePage extends StatefulWidget {
 
+
   final String currentUserId;
   MyManagerHomePage({Key key, @required this.currentUserId}) : super(key: key);
 
@@ -33,6 +35,23 @@ class _MyManagerHomePageState extends State<MyManagerHomePage> {
   final _auth = FirebaseAuth.instance;
   String currentUserId;
   bool showProgress = false;
+  int counter = 0;
+
+  Future <void> getRequestCount() async {
+    final QuerySnapshot qSnap = await FirebaseFirestore.instance.collection('request').doc('reqU' + currentUserId).collection('req' + currentUserId).get();
+    final int documents = qSnap.docs.length;
+    counter = documents;
+  }
+
+  @override
+  void initState() {
+    getRequestCount().then((appointments){
+      setState(() {
+
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +66,7 @@ class _MyManagerHomePageState extends State<MyManagerHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               SizedBox(
-                height: 75.0,
+                height: 150.0,
                 child: Image.asset(
                   "assets/images/logo.png",
                   fit: BoxFit.contain,
@@ -74,6 +93,7 @@ class _MyManagerHomePageState extends State<MyManagerHomePage> {
                   height: 15.0,
                   color: Colors.lightBlue,
                   onPressed: () async {
+                    counter = 0;
                     setState(() {
                       //showProgress = true;
                     });
@@ -83,6 +103,29 @@ class _MyManagerHomePageState extends State<MyManagerHomePage> {
                   },
                   child: Stack(
                     children: <Widget>[
+                      counter != 0 ? new Positioned(
+                        right: 11,
+                        top: 3,
+                        child: new Container(
+                          padding: EdgeInsets.all(4),
+                          decoration: new BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          constraints: BoxConstraints(
+                            minWidth: 14,
+                            minHeight: 14,
+                          ),
+                          child: Text(
+                            '$counter',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ) : new Container(),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Icon(Icons.calendar_today_outlined),

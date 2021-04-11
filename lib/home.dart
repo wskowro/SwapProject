@@ -5,6 +5,7 @@ import 'schedule.dart';
 import 'main.dart';
 import 'chat.dart';
 import 'requestMailBox.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MyHomePage extends StatefulWidget {
 
@@ -14,11 +15,30 @@ class MyHomePage extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState(currentUserId: currentUserId);
 }
+
+
 class _MyHomePageState extends State<MyHomePage> {
   _MyHomePageState({Key key, @required this.currentUserId});
   final _auth = FirebaseAuth.instance;
   String currentUserId;
   bool showProgress = false;
+  int counter = 0;
+
+  Future <void> getRequestCount() async {
+    final QuerySnapshot qSnap = await FirebaseFirestore.instance.collection('request').doc('reqU' + currentUserId).collection('req' + currentUserId).get();
+    final int documents = qSnap.docs.length;
+    counter = documents;
+  }
+
+  @override
+  void initState() {
+    getRequestCount().then((appointments){
+      setState(() {
+
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +49,12 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: ModalProgressHUD(
           inAsyncCall: showProgress,
+
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               SizedBox(
-                height: 75.0,
+                height: 150.0,
                 child: Image.asset(
                   "assets/images/logo.png",
                   fit: BoxFit.contain,
@@ -58,7 +79,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     textColor: Colors.white,
                     height: 15.0,
                     color: Colors.lightBlue,
+
                     onPressed: () async {
+                      counter = 0;
                       setState(() {
                         //showProgress = true;
                       });
@@ -68,6 +91,29 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                     child: Stack(
                       children: <Widget>[
+                        counter != 0 ? new Positioned(
+                          right: 11,
+                          top: 3,
+                          child: new Container(
+                            padding: EdgeInsets.all(4),
+                            decoration: new BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            constraints: BoxConstraints(
+                              minWidth: 14,
+                              minHeight: 14,
+                            ),
+                            child: Text(
+                              '$counter',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ) : new Container(),
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Icon(Icons.calendar_today_outlined),
@@ -80,6 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                         )
+
                       ],
                     ),
                   ),
@@ -121,10 +168,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                 fontSize: 20.0,
                               ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
+
                   ),
               ),
               SizedBox(

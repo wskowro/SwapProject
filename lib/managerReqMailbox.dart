@@ -199,7 +199,7 @@ class ManagerReqMailboxState extends State<ManagerReqMailbox> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Available Users',
+          'Swap Requests',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
