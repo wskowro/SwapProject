@@ -35,10 +35,7 @@ class ChangeRequestState extends State<ChangeRequest> {
       setState(() {
       });
     });
-    getAvailable().then((hold){
-      setState(() {
-      });
-    });
+
     super.initState();
   }
 
@@ -97,6 +94,10 @@ class ChangeRequestState extends State<ChangeRequest> {
         }
       }
 
+      getAvailable().then((hold){
+        setState(() {
+        });
+      });
 
 
 
@@ -248,6 +249,7 @@ class ChangeRequestSecondState extends State<ChangeRequestSecond> {
   String userName;
   String myName;
   List userList = [];
+  List userListEdited = [];
   List userDays = [];
   List userDayStart = [];
   List userDayEnd = [];
@@ -282,22 +284,44 @@ class ChangeRequestSecondState extends State<ChangeRequestSecond> {
     allUsers.forEach((users)
     {
         userDays.add(users["eventName"]);
-        print(users["eventName"]);
+
         userDayStart.add(users["from"].toDate());
-        print(users["from"]);
+
         userDayEnd.add(users["to"].toDate());
-        print(users["to"]);
+
       });
 
     return myDays;
   }
+
+  Future <void> checkDates() async {
+    String calID;
+    List myDays;
+
+    calID = 'cal' + currentUserId;
+    // Get docs from collection reference
+    CollectionReference _collectionRef =
+    FirebaseFirestore.instance.collection('schedule').doc(calID).collection(calID);
+    QuerySnapshot querySnapshot = await _collectionRef.get();
+    final allUsers = querySnapshot.docs.map((doc) => doc.data()).toList();
+    allUsers.forEach((users)
+    {
+      for (int x = 0; x < userDays.length; x++)
+        {
+          if (userDays.elementAt(x)==users["eventName"])
+            {
+              userDays.removeAt(x);
+            }
+        }
+
+    }
+    );
+  }
+
   //show selected users scheduled days other then selected day and ones current user isn't already working
   @override
   Widget build(BuildContext context) {
-    print(currentUserId);
-    print(shiftDay);
-    print(userName);
-    print(myName);
+
 
     for (int x = 0; x < userDays.length; x++)
       {
@@ -306,6 +330,11 @@ class ChangeRequestSecondState extends State<ChangeRequestSecond> {
             userDays.removeAt(x);
           }
       }
+
+    checkDates().then((myUsers){
+      setState(() {
+      });
+    });
 
 
     return Scaffold(
