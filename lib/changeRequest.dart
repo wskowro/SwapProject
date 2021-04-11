@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:scheduleapp_capstone/home.dart';
 import 'schedule.dart';
+import 'managerHome.dart';
 
 class ChangeRequest extends StatefulWidget {
   final String currentUserId;
@@ -106,10 +108,38 @@ class ChangeRequestState extends State<ChangeRequest> {
       //print('test1');
       return MaterialApp(
         home: Scaffold(
+          appBar: AppBar(
+            title: Text("Request Form"),
+            actions: <Widget>[
+              // Using Stack to show Notification Badge
+              new Stack(
+                children: <Widget>[
+                  new IconButton(icon: Icon(Icons.home), onPressed: () {
+                    setState(() {
+
+                    });
+                    if (currentUserId == 'EPJBgIzeSDNAfnSxXBqIZSR6foC2') {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) =>
+                              MyManagerHomePage(currentUserId: currentUserId)));
+                    }
+                    else
+                    {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) =>
+                              MyHomePage(currentUserId: currentUserId)));
+                    }
+                  }),
+                ],
+              ),
+            ],
+          ),
           body: Center(
             child: Column(children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(top: 250, bottom: 30),
+                padding: EdgeInsets.only(top: 150, bottom: 30),
               ),
 
               DropdownButton<String>(
@@ -338,10 +368,28 @@ class ChangeRequestSecondState extends State<ChangeRequestSecond> {
 
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Request Form"),
+        actions: <Widget>[
+          // Using Stack to show Notification Badge
+          new Stack(
+            children: <Widget>[
+              new IconButton(icon: Icon(Icons.home), onPressed: () {
+                setState(() {
+
+                });
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyHomePage(currentUserId: currentUserId)));
+              }),
+            ],
+          ),
+        ],
+      ),
       body: Center(
         child: Column(children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(top: 250, bottom: 30),
+            padding: EdgeInsets.only(top: 150, bottom: 30),
           ),
 
           DropdownButton<String>(

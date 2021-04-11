@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'changeRequest.dart';
+import 'home.dart';
+import 'managerHome.dart';
 
 
 
@@ -75,6 +77,31 @@ class EventCalendarState extends State<MySchedulePage> {
               style: TextStyle(
                   color: Colors.black, fontWeight: FontWeight.bold),
             ),
+            actions: <Widget>[
+              // Using Stack to show Notification Badge
+              new Stack(
+                children: <Widget>[
+                  new IconButton(icon: Icon(Icons.home), onPressed: () {
+                    setState(() {
+
+                    });
+                    if (currentUserId == 'EPJBgIzeSDNAfnSxXBqIZSR6foC2') {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) =>
+                              MyManagerHomePage(currentUserId: currentUserId)));
+                    }
+                    else
+                    {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) =>
+                              MyHomePage(currentUserId: currentUserId)));
+                    }
+                  }),
+                ],
+              ),
+            ],
             centerTitle: true,
           ),
           body: Padding(

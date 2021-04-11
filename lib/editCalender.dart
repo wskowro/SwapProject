@@ -4,6 +4,7 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'dart:math';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'home.dart';
 
 part 'color-picker.dart';
 
@@ -72,6 +73,7 @@ class EventCalendarState extends State<EditCalender> {
   Widget build([BuildContext context]) {
     _events = DataSource(appointments);
     return Scaffold(
+
         resizeToAvoidBottomInset: false,
         //: false,
         appBar: AppBar(
@@ -79,6 +81,21 @@ class EventCalendarState extends State<EditCalender> {
             peerName,
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
+          actions: <Widget>[
+            // Using Stack to show Notification Badge
+            new Stack(
+              children: <Widget>[
+                new IconButton(icon: Icon(Icons.home), onPressed: () {
+                  setState(() {
+
+                  });
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MyHomePage(currentUserId: currentUserId)));
+                }),
+              ],
+            ),
+          ],
           centerTitle: true,
         ),
         body: Padding(

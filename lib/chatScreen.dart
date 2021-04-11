@@ -7,6 +7,8 @@ import 'widget/loading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import'home.dart';
+import 'managerHome.dart';
 
 class Chat extends StatelessWidget {
   final String peerId;
@@ -24,6 +26,29 @@ class Chat extends StatelessWidget {
           peerName,
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
+        actions: <Widget>[
+          // Using Stack to show Notification Badge
+          new Stack(
+            children: <Widget>[
+              new IconButton(icon: Icon(Icons.home), onPressed: () {
+
+                if (currentUserId == 'EPJBgIzeSDNAfnSxXBqIZSR6foC2') {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) =>
+                          MyManagerHomePage(currentUserId: currentUserId)));
+                }
+                else
+                {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) =>
+                          MyHomePage(currentUserId: currentUserId)));
+                }
+              }),
+            ],
+          ),
+        ],
         centerTitle: true,
       ),
       body: ChatScreen(
@@ -365,6 +390,7 @@ class ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return WillPopScope(
       child: Stack(
         children: <Widget>[

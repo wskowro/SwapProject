@@ -198,13 +198,31 @@ class RequestMailBoxState extends State<RequestMailBox> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Swap Requests',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
+        title: Text("Swap Request"),
         actions: <Widget>[
+          // Using Stack to show Notification Badge
+          new Stack(
+            children: <Widget>[
+              new IconButton(icon: Icon(Icons.home), onPressed: () {
+                setState(() {
 
+                });
+                if (currentUserId == 'EPJBgIzeSDNAfnSxXBqIZSR6foC2') {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) =>
+                          MyManagerHomePage(currentUserId: currentUserId)));
+                }
+                else
+                {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) =>
+                          MyHomePage(currentUserId: currentUserId)));
+                }
+              }),
+            ],
+          ),
         ],
       ),
       body: WillPopScope(
