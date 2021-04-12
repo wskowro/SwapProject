@@ -69,7 +69,7 @@ class ChangeRequestState extends State<ChangeRequest> {
       final allUsers = querySnapshot2.docs.map((doc) => doc.data()).toList();
       allUsers.forEach((users)
       {
-        print('3');
+
         if (users["eventName"] == shiftDay) {
           print('4');
           print(userList.elementAt(x));
@@ -378,9 +378,19 @@ class ChangeRequestSecondState extends State<ChangeRequestSecond> {
                 setState(() {
 
                 });
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MyHomePage(currentUserId: currentUserId)));
+                if (currentUserId == 'EPJBgIzeSDNAfnSxXBqIZSR6foC2') {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) =>
+                          MyManagerHomePage(currentUserId: currentUserId)));
+                }
+                else
+                {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) =>
+                          MyHomePage(currentUserId: currentUserId)));
+                }
               }),
             ],
           ),

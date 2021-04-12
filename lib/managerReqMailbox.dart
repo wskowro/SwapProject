@@ -410,6 +410,29 @@ class ManagerReqMailboxChoiceState extends State<ManagerReqMailboxChoice> {
     return Scaffold(
         appBar: AppBar(
           title: Text("Shift Swap Request"),
+          actions: <Widget>[
+            // Using Stack to show Notification Badge
+            new Stack(
+              children: <Widget>[
+                new IconButton(icon: Icon(Icons.home), onPressed: () {
+
+                  if (currentUserId == 'EPJBgIzeSDNAfnSxXBqIZSR6foC2') {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) =>
+                            MyManagerHomePage(currentUserId: currentUserId)));
+                  }
+                  else
+                  {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) =>
+                            MyHomePage(currentUserId: currentUserId)));
+                  }
+                }),
+              ],
+            ),
+          ],
         ),
         body: Center(
             child: Column(
