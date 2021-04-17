@@ -410,9 +410,11 @@ class RequestMailBoxChoiceState extends State<RequestMailBoxChoice> {
           ),
         ],
       ),
+
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+
             children: <Widget>[
           Text(
             "Your Shift",

@@ -37,6 +37,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
   bool showProgress = false;
   String email, password;
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+  String loginCheck = "";
   @override
 
 
@@ -64,7 +65,11 @@ class _MyLoginPageState extends State<MyLoginPage> {
                 style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20.0),
               ),
               SizedBox(
-                height: 50.0,
+                height: 30.0,
+
+              ),
+              Text (loginCheck,
+                style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15.0, color: Colors.red),
               ),
               SizedBox(
                 height: 20.0,
@@ -156,6 +161,12 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
                         }
                       } catch (e) {
+
+                        loginCheck = "Incorrect Email/Password";
+                        setState(() {
+                          showProgress = false;
+                        });
+
 
                       }
                     },
