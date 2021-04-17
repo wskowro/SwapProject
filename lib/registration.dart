@@ -26,6 +26,7 @@ class _MyRegistrationPageState extends State<MyRegistrationPage> {
   final _auth = FirebaseAuth.instance;
   bool showProgress = false;
   String email, password, userName;
+  String regCheck = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +52,14 @@ class _MyRegistrationPageState extends State<MyRegistrationPage> {
                 style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20.0),
               ),
               SizedBox(
-                height: 20.0,
+                height: 5.0,
+              ),
+
+              Text(regCheck,
+                style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15.0, color: Colors.red),
+              ),
+              SizedBox(
+                height: 5.0,
               ),
           Container(
             width: 310,
@@ -147,6 +155,11 @@ class _MyRegistrationPageState extends State<MyRegistrationPage> {
                         });
                       }
                     } catch (e) {}
+                    regCheck = "Email already registered";
+                    setState(() {
+                      showProgress = false;
+                    });
+
                   },
                     minWidth: MediaQuery.of(context).size.width,
                     padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
