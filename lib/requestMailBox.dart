@@ -411,7 +411,8 @@ class RequestMailBoxChoiceState extends State<RequestMailBoxChoice> {
         ],
       ),
 
-        body: Center(
+        body: SingleChildScrollView(
+          child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
 
@@ -568,6 +569,7 @@ class RequestMailBoxChoiceState extends State<RequestMailBoxChoice> {
             ),
           ),
         ])
+        )
       )
     );
   }

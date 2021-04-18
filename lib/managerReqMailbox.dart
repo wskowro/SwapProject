@@ -434,7 +434,8 @@ class ManagerReqMailboxChoiceState extends State<ManagerReqMailboxChoice> {
             ),
           ],
         ),
-        body: Center(
+        body: SingleChildScrollView(
+        child: Center(
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -599,6 +600,7 @@ class ManagerReqMailboxChoiceState extends State<ManagerReqMailboxChoice> {
                   ),
                 ])
         )
+    )
     );
   }
 }
